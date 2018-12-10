@@ -26,6 +26,7 @@ void StateManager::pushState(State::Ptr state)
 {
 	if (!state->isInitialized())
 		state->initialize();
+	state->activate();
 	m_states.push_back(std::move(state));
 }
 
@@ -33,6 +34,7 @@ void StateManager::swapState(State::Ptr state)
 {
 	if (!state->isInitialized())
 		state->initialize();
+	state->activate();
 	m_swap = std::move(state);
 	m_flags |= Pop | Swap;
 }
@@ -47,7 +49,7 @@ void StateManager::popState()
 void StateManager::updateStates()
 {
 	if (m_flags & Pop) {
-		m_states.back().reset();
+		m_states.back()->deactivate();
 		m_states.pop_back();
 		m_flags &= ~Pop;
 

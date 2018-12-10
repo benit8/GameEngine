@@ -10,10 +10,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 State::State()
-: m_initialized(false)
-, m_active(false)
-, m_modal(true)
-, m_fullscreen(true)
 {
 }
 
@@ -25,7 +21,11 @@ State::~State()
 
 void State::initialize()
 {
+	if (m_initialized)
+		return;
 	m_initialized = true;
+
+	onInitialize();
 }
 
 void State::handleEvent(const sf::Event &e)
@@ -59,12 +59,16 @@ void State::render(sf::RenderTarget &renderTarget)
 
 void State::activate()
 {
+	if (m_active)
+		return;
 	m_active = true;
 	onActivate();
 }
 
 void State::deactivate()
 {
+	if (!m_active)
+		return;
 	m_active = false;
 	onDeactivate();
 }

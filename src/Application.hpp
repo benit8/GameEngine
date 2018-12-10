@@ -54,8 +54,6 @@ private:
 	bool m_shouldClose;
 
 	Window m_window;
-	Window::Mode m_windowStartupMode;
-	sf::Vector2u m_windowStartupSize;
 
 	FPSCounter m_fpsCounter;
 };

@@ -128,7 +128,7 @@ public:
 
 	void emit(Args... args) {
 		for (auto &slot : m_slots)
-			slot->emit(args...);
+			slot->emit(std::forward<Args>(args)...);
 	}
 
 	const SlotContainer &getSlots() const {

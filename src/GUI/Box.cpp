@@ -62,18 +62,19 @@ void Box::draw(sf::RenderTarget &rt)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Box::setBackgroundImage(const std::string &path, BackgroundMode mode)
+bool Box::setBackgroundImage(const std::string &path, BackgroundMode mode)
 {
 	sf::Image image;
-	if (image.loadFromFile(path))
-		setBackgroundImage(image, mode);
+	if (!image.loadFromFile(path))
+		return false;
+	return setBackgroundImage(image, mode);
 }
 
-void Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
+bool Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
 {
 	if (!m_background.loadFromImage(image)) {
 		std::cerr << "Failed to load box background" << std::endl;
-		return;
+		return false;
 	}
 
 	m_backgroundMode = mode;
@@ -81,6 +82,7 @@ void Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
 	m_zone.setTexture(&m_background);
 
 	update(sf::Time::Zero);
+	return true;
 }
 
 void Box::setBackgroundMode(BackgroundMode mode)

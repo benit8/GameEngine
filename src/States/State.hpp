@@ -34,14 +34,14 @@ public:
 	virtual ~State();
 
 public:
-	virtual void initialize();
-	virtual void handleEvent(const sf::Event &e);
-	virtual void update(const sf::Time &delta);
-	virtual void staticUpdate(const sf::Time &delta);
-	virtual void render(sf::RenderTarget &renderTarget);
+	void initialize();
+	void handleEvent(const sf::Event &e);
+	void update(const sf::Time &delta);
+	void staticUpdate(const sf::Time &delta);
+	void render(sf::RenderTarget &renderTarget);
 
-	virtual void activate();
-	virtual void deactivate();
+	void activate();
+	void deactivate();
 
 	template <class T, class ...Args>
 	T *makeGUI(Args&&... args)
@@ -60,6 +60,7 @@ public:
 
 	Signal<> onActivate;
 	Signal<> onDeactivate;
+	Signal<> onInitialize;
 	Signal<const sf::Time &> onUpdate;
 	Signal<const sf::Time &> onStaticUpdate;
 	Signal<sf::RenderTarget &> onRender;
@@ -68,8 +69,8 @@ protected:
 	EventDispatcher m_events;
 	std::list<std::unique_ptr<GUI::Widget>> m_gui;
 
-	bool m_initialized;
-	bool m_active;
-	bool m_modal;
-	bool m_fullscreen;
+	bool m_initialized = false;
+	bool m_active = false;
+	bool m_modal = true;
+	bool m_fullscreen = true;
 };

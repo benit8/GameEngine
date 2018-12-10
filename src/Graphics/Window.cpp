@@ -11,15 +11,26 @@
 
 Window::Window()
 : sf::RenderWindow()
+, m_mode(Windowed)
+, m_title("")
+, m_startupSize(600, 800)
 {
 }
 
 Window::Window(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
 : sf::RenderWindow(videoMode, title, styles, settings)
+, m_mode(Windowed)
+, m_title("")
+, m_startupSize(600, 800)
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+void Window::create(const std::string &title, int)
+{
+	create(title, m_startupSize);
+}
 
 void Window::create(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
 {
@@ -51,7 +62,7 @@ void Window::setMode(Mode mode, const sf::Vector2u &size)
 {
 	sf::Vector2u currentSize = getSize();
 
-	if (isOpen() && m_mode != mode) {
+	if (isOpen()) {
 		switch (mode) {
 			case Windowed:
 				if (size != currentSize)
@@ -60,12 +71,17 @@ void Window::setMode(Mode mode, const sf::Vector2u &size)
 					create(title(), sf::VideoMode(size.x, size.y));
 				break;
 			case Borderless:
-				createBorderless(title());
+				if (m_mode != Borderless)
+					createBorderless(title());
 				break;
 			case Fullscreen:
-				createFullscreen(title());
+				if (m_mode != Fullscreen)
+					createFullscreen(title());
 				break;
 		}
+	}
+	else if (size.x != 0 && size.y != 0) {
+		m_startupSize = size;
 	}
 
 	m_mode = mode;

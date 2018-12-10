@@ -64,12 +64,10 @@ void Widget::handleEvent(const sf::Event &e)
 
 void Widget::render(sf::RenderTarget &rt)
 {
-	if (m_parent != nullptr) {
-		sf::Vector2f offset = getParentOffset();
-		m_zone.move(offset);
-		draw(rt);
-		m_zone.move(-offset);
-	}
+	sf::Vector2f offset = getParentOffset();
+	m_zone.move(offset);
+	draw(rt);
+	m_zone.move(-offset);
 
 	for (auto &child : m_children)
 		child->render(rt);

@@ -41,6 +41,7 @@ public:
 	~Window() = default;
 
 public:
+	void create(const std::string &title, int);
 	void create(const std::string &title,
 	            sf::VideoMode videoMode = sf::VideoMode::getDesktopMode(),
 	            sf::Uint32 styles = sf::Style::Default,
@@ -73,4 +74,5 @@ public:
 private:
 	Mode m_mode;
 	std::string m_title;
+	sf::Vector2u m_startupSize;
 };

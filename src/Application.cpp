@@ -12,12 +12,7 @@
 Application::Application()
 : m_appName("Application")
 , m_shouldClose(false)
-, m_windowStartupMode(Window::Windowed)
-, m_windowStartupSize(0, 0)
 {
-	m_windowStartupSize.x = sf::VideoMode::getDesktopMode().width;
-	m_windowStartupSize.y = sf::VideoMode::getDesktopMode().height;
-
 	m_fpsCounter.setLimit(60);
 }
 
@@ -71,18 +66,7 @@ void Application::close()
 
 void Application::launch()
 {
-	switch (m_windowStartupMode) {
-		case Window::Windowed:
-			m_window.create(m_appName, sf::VideoMode(m_windowStartupSize.x, m_windowStartupSize.y));
-			break;
-		case Window::Borderless:
-			m_window.createBorderless(m_appName);
-			break;
-		case Window::Fullscreen:
-			m_window.createFullscreen(m_appName);
-			break;
-	}
-
+	m_window.create(m_appName, 0);
 	m_fpsCounter.reset();
 }
 
@@ -112,7 +96,7 @@ void Application::update(const sf::Time &delta, bool staticUpdate)
 		if (staticUpdate)
 			state->staticUpdate(delta);
 		else
-			state->staticUpdate(delta);
+			state->update(delta);
 	}
 }
 

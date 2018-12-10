@@ -10,7 +10,7 @@ CC	=	g++
 
 ################################################################################
 
-NAME	=	a.out
+NAME	=	engine
 
 SRCS	=	main.cpp				\
 		src/Application.cpp			\
