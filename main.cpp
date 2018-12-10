@@ -46,7 +46,7 @@ public:
 		if (windowed)
 			Application::getInstance()->window().setMode(Window::Fullscreen);
 		else
-			Application::getInstance()->window().setMode(Window::Windowed, {1280, 720});
+			Application::getInstance()->window().setMode(Window::Windowed);
 
 		windowed = !windowed;
 	}
@@ -61,7 +61,7 @@ int main(void)
 {
 	Application *app = Application::getInstance();
 	app->appName("Engine");
-	app->window().setMode(Window::Windowed, {1280, 720});
+	// app->window().setMode(Window::Windowed, {1280, 720});
 	app->pushState<TestState>();
 
 	return app->run();

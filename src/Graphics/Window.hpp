@@ -41,17 +41,16 @@ public:
 	~Window() = default;
 
 public:
-	void create(const std::string &title, int);
-	void create(const std::string &title,
-	            sf::VideoMode videoMode = sf::VideoMode::getDesktopMode(),
-	            sf::Uint32 styles = sf::Style::Default,
-	            const sf::ContextSettings &settings = sf::ContextSettings(24, 8, 0, 3, 0));
-	void create(const std::string &title,
-	            const sf::Vector2u &windowSize,
-	            sf::Uint32 styles = sf::Style::Default,
-	            const sf::ContextSettings &settings = sf::ContextSettings(24, 8, 0, 3, 0));
-	void createBorderless(const std::string &title);
-	void createFullscreen(const std::string &title);
+	void open(const std::string &title,
+	          sf::VideoMode videoMode = sf::VideoMode::getDesktopMode(),
+	          sf::Uint32 styles = sf::Style::Default,
+	          const sf::ContextSettings &settings = sf::ContextSettings(24, 8, 0, 3, 0));
+	void open(const std::string &title,
+	          sf::Vector2u windowSize,
+	          sf::Uint32 styles = sf::Style::Default,
+	          const sf::ContextSettings &settings = sf::ContextSettings(24, 8, 0, 3, 0));
+	void openBorderless(const std::string &title);
+	void openFullscreen(const std::string &title);
 
 	Mode getMode() const;
 	void setMode(Mode mode, const sf::Vector2u &size = sf::Vector2u(0, 0));

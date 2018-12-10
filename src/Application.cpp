@@ -66,7 +66,7 @@ void Application::close()
 
 void Application::launch()
 {
-	m_window.create(m_appName, 0);
+	m_window.open(m_appName, sf::Vector2u(0, 0));
 	m_fpsCounter.reset();
 }
 
