@@ -15,6 +15,9 @@ Window::Window()
 , m_title("")
 , m_startupSize(800, 600)
 {
+	auto dm = sf::VideoMode::getDesktopMode();
+	m_startupSize.x = dm.width;
+	m_startupSize.y = dm.height;
 }
 
 Window::Window(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
@@ -22,6 +25,13 @@ Window::Window(const std::string &title, sf::VideoMode videoMode, sf::Uint32 sty
 , m_mode(Windowed)
 , m_title("")
 , m_startupSize(800, 600)
+{
+	auto dm = sf::VideoMode::getDesktopMode();
+	m_startupSize.x = dm.width;
+	m_startupSize.y = dm.height;
+}
+
+Window::~Window()
 {
 }
 
@@ -49,11 +59,6 @@ void Window::openFullscreen(const std::string &title)
 	open(title, sf::VideoMode::getFullscreenModes()[0], sf::Style::Fullscreen);
 }
 
-
-Window::Mode Window::getMode() const
-{
-	return m_mode;
-}
 
 void Window::setMode(Mode mode, const sf::Vector2u &_size)
 {
@@ -83,59 +88,6 @@ void Window::setMode(Mode mode, const sf::Vector2u &_size)
 	}
 
 	m_mode = mode;
-}
-
-const std::string &Window::title() const
-{
-	return m_title;
-}
-
-void Window::title(const std::string &title)
-{
-	m_title = title;
-	setTitle(title);
-}
-
-
-unsigned Window::width() const
-{
-	return getSize().x;
-}
-
-void Window::width(int width)
-{
-	setSize(sf::Vector2u(width, height()));
-}
-
-unsigned Window::height() const
-{
-	return getSize().y;
-}
-
-void Window::height(int height)
-{
-	setSize(sf::Vector2u(width(), height));
-}
-
-
-int Window::left() const
-{
-	return getPosition().y;
-}
-
-void Window::left(int left)
-{
-	setPosition(sf::Vector2i(top(), left));
-}
-
-int Window::top() const
-{
-	return getPosition().y;
-}
-
-void Window::top(int top)
-{
-	setPosition(sf::Vector2i(top, left()));
 }
 
 

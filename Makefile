@@ -12,13 +12,17 @@ CC	=	g++
 
 NAME	=	engine
 
-SRCS	=	main.cpp				\
+SRCS	=	extern/stb_image.cpp			\
+		main.cpp				\
 		src/Application.cpp			\
 		src/EventDispatcher.cpp			\
 		src/StateManager.cpp			\
 		src/States/State.cpp			\
+		src/Graphics/AnimatedSprite.cpp		\
+		src/Graphics/Animation.cpp		\
 		src/Graphics/FPSCounter.cpp		\
 		src/Graphics/FontLoader.cpp		\
+		src/Graphics/GIF.cpp			\
 		src/Graphics/Window.cpp			\
 		src/GUI/GUI.cpp				\
 		src/GUI/Env.cpp				\

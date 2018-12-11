@@ -16,14 +16,28 @@ namespace GUI
 
 Box::Box()
 : m_backgroundMode(Cover)
+, m_backgroundAnim(nullptr)
 {
 	m_mode = Visible;
 }
 
+Box::~Box()
+{
+	if (m_backgroundAnim)
+		delete m_backgroundAnim;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
-void Box::update(const sf::Time &)
+void Box::update(const sf::Time &delta)
 {
+	if (m_backgroundAnim != nullptr) {
+		m_backgroundAnim->update(delta);
+		if (m_backgroundAnim->targetUpdate()) {
+			m_background.loadFromImage(m_backgroundAnim->currentFrame().image);
+		}
+	}
+
 	sf::Vector2u imgSize = m_background.getSize();
 	if (imgSize.x == 0 && imgSize.y == 0)
 		return;
@@ -64,10 +78,20 @@ void Box::draw(sf::RenderTarget &rt)
 
 bool Box::setBackgroundImage(const std::string &path, BackgroundMode mode)
 {
-	sf::Image image;
-	if (!image.loadFromFile(path))
-		return false;
-	return setBackgroundImage(image, mode);
+	if (path.rfind("gif") == path.length() - 3) {
+		auto gif = new Graphics::GIF;
+		if (!gif->loadFromFile(path)) {
+			delete gif;
+			return false;
+		}
+		return setBackgroundImage(gif, mode);
+	}
+	else {
+		sf::Image image;
+		if (!image.loadFromFile(path))
+			return false;
+		return setBackgroundImage(image, mode);
+	}
 }
 
 bool Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
@@ -80,6 +104,23 @@ bool Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
 	m_backgroundMode = mode;
 	m_background.setRepeated(m_backgroundMode == Tiled);
 	m_zone.setTexture(&m_background);
+
+	update(sf::Time::Zero);
+	return true;
+}
+
+bool Box::setBackgroundImage(Graphics::GIF *gif, BackgroundMode mode)
+{
+	if (!m_background.loadFromImage(gif->frame(0).image)) {
+		std::cerr << "Failed to load box background" << std::endl;
+		return false;
+	}
+
+	m_backgroundMode = mode;
+	m_background.setRepeated(m_backgroundMode == Tiled);
+	m_zone.setTexture(&m_background);
+	m_backgroundAnim = gif;
+	m_backgroundAnim->play();
 
 	update(sf::Time::Zero);
 	return true;

@@ -16,6 +16,7 @@ namespace GUI {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Widget.hpp"
+#include "Graphics/GIF.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +35,7 @@ public:
 
 public:
 	Box();
+	~Box();
 
 public:
 	virtual void update(const sf::Time &) override;
@@ -42,6 +44,7 @@ public:
 public:
 	bool setBackgroundImage(const std::string &path, BackgroundMode mode = Cover);
 	bool setBackgroundImage(const sf::Image &image, BackgroundMode mode = Cover);
+	bool setBackgroundImage(Graphics::GIF *gif, BackgroundMode mode = Cover);
 	void setBackgroundColor(const sf::Color &color);
 	void setBackgroundMode(BackgroundMode mode);
 	void setBorderColor(const sf::Color &color);
@@ -50,6 +53,7 @@ public:
 private:
 	sf::Texture m_background;
 	BackgroundMode m_backgroundMode;
+	Graphics::GIF *m_backgroundAnim;
 };
 
 }

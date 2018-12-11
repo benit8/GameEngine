@@ -38,7 +38,7 @@ public:
 	       sf::VideoMode videoMode = sf::VideoMode::getDesktopMode(),
 	       sf::Uint32 styles = sf::Style::Default,
 	       const sf::ContextSettings &settings = sf::ContextSettings(24, 8, 0, 3, 0));
-	~Window() = default;
+	~Window();
 
 public:
 	void open(const std::string &title,
@@ -52,20 +52,21 @@ public:
 	void openBorderless(const std::string &title);
 	void openFullscreen(const std::string &title);
 
-	Mode getMode() const;
 	void setMode(Mode mode, const sf::Vector2u &size = sf::Vector2u(0, 0));
-	const std::string &title() const;
-	void title(const std::string &title);
+	Mode getMode() const { return m_mode; }
 
-	unsigned width() const;
-	void width(int width);
-	unsigned height() const;
-	void height(int height);
+	const std::string &title() const { return m_title; }
+	void title(const std::string &title) { m_title = title; setTitle(title); }
 
-	int top() const;
-	void top(int top);
-	int left() const;
-	void left(int left);
+	unsigned width() const { return getSize().x; }
+	void width(int width) { setSize(sf::Vector2u(width, height())); }
+	unsigned height() const { return getSize().y; }
+	void height(int height) { setSize(sf::Vector2u(width(), height)); }
+
+	int top() const { return getPosition().y; }
+	void top(int top) { setPosition(sf::Vector2i(top, left())); }
+	int left() const { return getPosition().x; }
+	void left(int left) { setPosition(sf::Vector2i(top(), left)); }
 
 	void setIcon(const std::string &path);
 	void setCursor(sf::Cursor::Type type);

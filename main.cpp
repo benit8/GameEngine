@@ -21,8 +21,6 @@ public:
 			Application::getInstance()->close();
 		}, sf::Keyboard::Escape);
 
-		m_events.onKeyDown(BIND(TestState::switchScreen), sf::Keyboard::Space);
-
 		onInitialize.connect(this, &TestState::initialize);
 	}
 
@@ -32,23 +30,11 @@ public:
 public:
 	void initialize() {
 		m_bg = makeGUI<GUI::Box>();
-		if (!m_bg->setBackgroundImage("assets/bg.jpg"))
-			std::cerr << "Failed to load image background" << std::endl;
+		m_bg->setBackgroundImage("assets/bg.gif");
 	}
 
 	void resized(sf::Vector2u size) {
 		m_bg->setSize({size.x, size.y});
-	}
-
-	void switchScreen() {
-		static bool windowed = true;
-
-		if (windowed)
-			Application::getInstance()->window().setMode(Window::Fullscreen);
-		else
-			Application::getInstance()->window().setMode(Window::Windowed);
-
-		windowed = !windowed;
 	}
 
 private:
@@ -61,7 +47,7 @@ int main(void)
 {
 	Application *app = Application::getInstance();
 	app->appName("Engine");
-	// app->window().setMode(Window::Windowed, {1280, 720});
+	app->window().setMode(Window::Windowed/*, {1280, 720}*/);
 	app->pushState<TestState>();
 
 	return app->run();
