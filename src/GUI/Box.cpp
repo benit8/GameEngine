@@ -19,6 +19,7 @@ Box::Box()
 , m_backgroundAnim(nullptr)
 {
 	m_mode = Visible;
+	m_zone.setTexture(&m_background);
 }
 
 Box::~Box()
@@ -36,7 +37,6 @@ void Box::update(const sf::Time &delta)
 		if (m_backgroundAnim->targetUpdate()) {
 			if (!m_background.loadFromImage(m_backgroundAnim->currentFrame().image))
 				std::cerr << "GUI::Box: Failed to update background" << std::endl;
-			m_zone.setTexture(&m_background);
 			m_backgroundAnim->resetTargetUpdate();
 		}
 	}
@@ -104,9 +104,13 @@ bool Box::setBackgroundImage(const sf::Image &image, BackgroundMode mode)
 		return false;
 	}
 
+	if (m_backgroundAnim) {
+		delete m_backgroundAnim;
+		m_backgroundAnim = nullptr;
+	}
+
 	m_backgroundMode = mode;
 	m_background.setRepeated(m_backgroundMode == Tiled);
-	m_zone.setTexture(&m_background);
 
 	update(sf::Time::Zero);
 	return true;
@@ -119,9 +123,13 @@ bool Box::setBackgroundImage(Graphics::GIF *gif, BackgroundMode mode)
 		return false;
 	}
 
+	if (m_backgroundAnim) {
+		delete m_backgroundAnim;
+		m_backgroundAnim = nullptr;
+	}
+
 	m_backgroundMode = mode;
 	m_background.setRepeated(m_backgroundMode == Tiled);
-	m_zone.setTexture(&m_background);
 	m_backgroundAnim = gif;
 	m_backgroundAnim->play();
 

@@ -44,11 +44,13 @@ public:
 public:
 	bool setBackgroundImage(const std::string &path, BackgroundMode mode = Cover);
 	bool setBackgroundImage(const sf::Image &image, BackgroundMode mode = Cover);
-	bool setBackgroundImage(Graphics::GIF *gif, BackgroundMode mode = Cover);
 	void setBackgroundColor(const sf::Color &color);
 	void setBackgroundMode(BackgroundMode mode);
 	void setBorderColor(const sf::Color &color);
 	void setBorderSize(float size);
+
+private:
+	bool setBackgroundImage(Graphics::GIF *gif, BackgroundMode mode);
 
 private:
 	sf::Texture m_background;
