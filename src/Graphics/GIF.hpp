@@ -38,14 +38,15 @@ class GIF
 public:
 	struct Frame
 	{
-		Frame(const sf::Vector2u &size)
+		Frame(const sf::Vector2u &size, uint8_t *data, uint16_t delay)
 		: size(size)
-		, delay(sf::Time::Zero)
+		, duration(sf::milliseconds(delay))
 		{
+			image.create(size.x, size.y, data);
 		}
 
 		sf::Vector2u size;
-		sf::Time delay;
+		sf::Time duration;
 		sf::Image image;
 	};
 
@@ -68,6 +69,7 @@ public:
 	Frame &currentFrame() { return *m_frames[m_currentFrame]; }
 	Frame &operator [](std::size_t pos) { return *m_frames[pos]; }
 	bool targetUpdate() const { return m_targetUpdate; }
+	void resetTargetUpdate() { m_targetUpdate = false; }
 
 	// operator sf::Texture() {
 	// 	sf::Texture texture;
@@ -80,6 +82,7 @@ private:
 	std::vector<Frame *> m_frames;
 	bool m_playing;
 	sf::Time m_progress;
+	sf::Time m_nextProgressStep;
 	std::size_t m_currentFrame;
 	bool m_targetUpdate;
 };

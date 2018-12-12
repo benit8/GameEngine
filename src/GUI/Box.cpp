@@ -34,7 +34,10 @@ void Box::update(const sf::Time &delta)
 	if (m_backgroundAnim != nullptr) {
 		m_backgroundAnim->update(delta);
 		if (m_backgroundAnim->targetUpdate()) {
-			m_background.loadFromImage(m_backgroundAnim->currentFrame().image);
+			if (!m_background.loadFromImage(m_backgroundAnim->currentFrame().image))
+				std::cerr << "GUI::Box: Failed to update background" << std::endl;
+			m_zone.setTexture(&m_background);
+			m_backgroundAnim->resetTargetUpdate();
 		}
 	}
 

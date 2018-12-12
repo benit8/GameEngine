@@ -30,11 +30,11 @@ public:
 public:
 	void initialize() {
 		m_bg = makeGUI<GUI::Box>();
-		m_bg->setBackgroundImage("assets/bg.gif");
+		m_bg->setBackgroundImage("assets/waterfall.gif");
 	}
 
 	void resized(sf::Vector2u size) {
-		m_bg->setSize({size.x, size.y});
+		m_bg->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
 	}
 
 private:

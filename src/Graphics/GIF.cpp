@@ -17,9 +17,9 @@ namespace Graphics
 
 GIF::GIF()
 : m_size(0, 0)
-// , m_frames(0)
 , m_playing(false)
 , m_progress(sf::Time::Zero)
+, m_nextProgressStep(sf::Time::Zero)
 , m_currentFrame(0)
 , m_targetUpdate(false)
 {
@@ -38,32 +38,26 @@ bool GIF::loadFromFile(const std::string &filename)
 	int width = 0;
 	int height = 0;
 	int frames = 0;
-	uint8_t *data = stbi_gif_load(filename.c_str(), &width, &height, &frames);
+	gif_result_t *data = stbi_gif_load(filename.c_str(), &width, &height, &frames);
 	if (data == NULL) {
 		std::cerr << "GIF loading failed" << std::endl;
 		return false;
 	}
 
-	std::cout << frames << " frames of " << width << "x" << height << std::endl;
-
+	m_frames.reserve(frames);
 	m_size.x = width;
 	m_size.y = height;
-	m_frames.reserve(frames);
 
-	uint8_t *d = data;
-	for (int i = 0; i < frames; ++i) {
-		auto frame = new Frame(m_size);
-		frame->image.create(width, height, data);
-		d += width * height * 4;
+	gif_result_t *cur = data;
+	while (cur != NULL) {
+		m_frames.push_back(new Frame(m_size, cur->data, cur->delay));
 
-		uint16_t delay = d[0] + (d[1] << 8);
-		frame->delay = sf::seconds(delay / 100.f);
-		d += 2;
-
-		m_frames.push_back(frame);
+		gif_result_t *next = cur->next;
+		free(cur->data);
+		free(cur);
+		cur = next;
 	}
 
-	free(data);
 	return true;
 }
 
@@ -83,22 +77,21 @@ void GIF::stop()
 
 void GIF::update(const sf::Time &delta)
 {
+	if (!m_playing)
+		return;
+
+	if (m_nextProgressStep == sf::Time::Zero) {
+		m_nextProgressStep = m_frames[0]->duration;
+	}
+
 	m_progress += delta;
+	while (m_progress >= m_nextProgressStep) {
+		m_currentFrame++;
+		if (m_currentFrame >= m_frames.size())
+			m_currentFrame = 0;
 
-	sf::Time p = m_progress;
-	for (size_t i = 0; i < m_frames.size(); ) {
-		p -= m_frames[i]->delay;
-
-		if (i == m_frames.size() - 1) {
-			i = 0;
-			continue;
-		}
-		else if (p <= sf::Time::Zero && m_currentFrame != i) {
-			m_currentFrame = i;
-			m_targetUpdate = true;
-			break;
-		}
-		++i;
+		m_targetUpdate = true;
+		m_nextProgressStep += m_frames[m_currentFrame]->duration;
 	}
 }
 
