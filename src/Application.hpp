@@ -19,6 +19,9 @@ class Application;
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
+
 #include "StateManager.hpp"
 #include "Graphics/FPSCounter.hpp"
 #include "Graphics/Window.hpp"

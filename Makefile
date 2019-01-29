@@ -12,7 +12,12 @@ CC	=	g++
 
 NAME	=	engine
 
-SRCS	=	extern/stb_image.cpp			\
+SRCS	=	extern/stb/stb_image.cpp		\
+		extern/imgui/imgui.cpp			\
+		extern/imgui/imgui_draw.cpp		\
+		extern/imgui/imgui_widgets.cpp		\
+		extern/imgui/imgui-SFML.cpp		\
+		extern/imgui/imgui_demo.cpp		\
 		main.cpp				\
 		src/Application.cpp			\
 		src/EventDispatcher.cpp			\
@@ -24,14 +29,6 @@ SRCS	=	extern/stb_image.cpp			\
 		src/Graphics/FontLoader.cpp		\
 		src/Graphics/GIF.cpp			\
 		src/Graphics/Window.cpp			\
-		src/GUI/GUI.cpp				\
-		src/GUI/Env.cpp				\
-		src/GUI/Widget.cpp			\
-		src/GUI/Box.cpp				\
-		src/GUI/Button.cpp			\
-		src/GUI/Input.cpp			\
-		src/GUI/Modal.cpp			\
-		src/GUI/MessageBox.cpp			\
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -39,11 +36,9 @@ OBJS	=	$(SRCS:.cpp=.o)
 
 CXXFLAGS	+=	-std=c++17
 CXXFLAGS	+=	-W -Wall -Wextra
-CXXFLAGS	+=	-I. -Isrc
+CXXFLAGS	+=	-I. -Isrc -Iextern
 
-LDFLAGS	+=	-lsfml-system		\
-		-lsfml-window		\
-		-lsfml-graphics
+LDFLAGS	+=	-lsfml-system -lsfml-window -lsfml-graphics -lGL
 
 ################################################################################
 

@@ -19,6 +19,7 @@ Application::Application()
 Application::~Application()
 {
 	m_window.close();
+	ImGui::SFML::Shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +68,9 @@ void Application::close()
 void Application::launch()
 {
 	m_window.open(m_appName, sf::Vector2u(0, 0));
+
+	ImGui::SFML::Init(m_window);
+
 	m_fpsCounter.reset();
 }
 
@@ -95,8 +99,11 @@ void Application::update(const sf::Time &delta, bool staticUpdate)
 	for (auto &state : getActiveStates()) {
 		if (staticUpdate)
 			state->staticUpdate(delta);
-		else
+		else {
+			ImGui::SFML::Update(m_window, delta);
 			state->update(delta);
+			ImGui::EndFrame();
+		}
 	}
 }
 
@@ -104,6 +111,8 @@ void Application::render()
 {
 	for (auto &state : getVisibleStates())
 		state->render(m_window);
+
+	ImGui::SFML::Render(m_window);
 
 	m_fpsCounter.render(m_window);
 }

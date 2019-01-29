@@ -26,7 +26,7 @@ namespace Graphics {
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "extern/stb_gif.h"
+#include "stb/stb_gif.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

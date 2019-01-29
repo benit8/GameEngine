@@ -15,7 +15,9 @@ class State;
 
 #include "EventDispatcher.hpp"
 #include "../Utils/Signal.hpp"
-#include "GUI/GUI.hpp"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
 
 #include <memory>
 #include <SFML/System/Time.hpp>
@@ -43,14 +45,6 @@ public:
 	void activate();
 	void deactivate();
 
-	template <class T, class ...Args>
-	T *makeGUI(Args&&... args)
-	{
-		T *ptr = new T(std::forward<Args>(args)...);
-		m_gui.emplace_back(ptr);
-		return ptr;
-	}
-
 	bool isInitialized() const { return m_initialized; }
 	bool isActive() const { return m_active; }
 	bool isModal() const { return m_modal; }
@@ -67,7 +61,6 @@ public:
 
 protected:
 	EventDispatcher m_events;
-	std::list<std::unique_ptr<GUI::Widget>> m_gui;
 
 	bool m_initialized = false;
 	bool m_active = false;

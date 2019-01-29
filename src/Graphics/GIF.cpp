@@ -5,7 +5,7 @@
 ** Graphics / GIF.cpp
 */
 
-#include "extern/stb_image.h"
+#include "stb/stb_image.h"
 #include "GIF.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
