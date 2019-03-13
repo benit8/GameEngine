@@ -51,9 +51,9 @@ public:
 
 		if (ImGui::ColorEdit3("Background color", m_color)) {
 			std::cout << "color: " <<
-			static_cast<unsigned char>(m_color[0] * 255.f) << "," <<
-			static_cast<unsigned char>(m_color[1] * 255.f) << "," <<
-			static_cast<unsigned char>(m_color[2] * 255.f) << std::endl;
+			(m_color[0] * 255.f) << "," <<
+			(m_color[1] * 255.f) << "," <<
+			(m_color[2] * 255.f) << std::endl;
 		}
 
 		ImGui::InputText("Window title", m_text, 255);
