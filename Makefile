@@ -15,6 +15,7 @@ NAME	=	exe
 SRCS	=	extern/stb/stb_image.cpp		\
 		extern/imgui/imgui-SFML.cpp		\
 		extern/imgui/imgui.cpp			\
+		extern/imgui/imgui_demo.cpp		\
 		extern/imgui/imgui_draw.cpp		\
 		extern/imgui/imgui_widgets.cpp		\
 		tests/main.cpp				\

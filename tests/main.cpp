@@ -17,7 +17,7 @@ public:
 	{
 		m_events.onResize(BIND1(TestState::resized));
 		m_events.onKeyDown(BIND(TestState::switchFullscreen), sf::Keyboard::F11);
-		m_events.onKeyDown([&]() { Application::getInstance()->close(); }, sf::Keyboard::Escape);
+		m_events.onKeyDown([&]() { Application::get()->close(); }, sf::Keyboard::Escape);
 
 		onInitialize.connect(this, &TestState::initialize);
 		onUpdate.connect(this, &TestState::makeGUI);
@@ -39,14 +39,14 @@ public:
 
 	void switchFullscreen() {
 		static bool fullscreen = false;
-		if (!fullscreen) Application::getInstance()->window().setMode(Window::Fullscreen);
-		else             Application::getInstance()->window().setMode(Window::Windowed);
+		if (!fullscreen) Application::get()->window().setMode(Window::Fullscreen);
+		else             Application::get()->window().setMode(Window::Windowed);
 		fullscreen = !fullscreen;
 	}
 
 	void makeGUI(const sf::Time &/*delta*/)
 	{
-		ImGui::Begin("Sample window");
+		/* ImGui::Begin("Sample window");
 
 		if (ImGui::ColorEdit3("Background color", m_color)) {
 			std::cout << "color: " <<
@@ -61,7 +61,8 @@ public:
 			std::cout << m_text << std::endl;
 		}
 
-		ImGui::End();
+		ImGui::End(); */
+		ImGui::ShowDemoWindow(NULL);
 	}
 
 private:
@@ -75,7 +76,7 @@ private:
 
 int main(void)
 {
-	Application *app = Application::getInstance();
+	Application *app = Application::get();
 	app->appName("Engine");
 	app->window().setMode(Window::Windowed/*, {1280, 720}*/);
 	app->pushState<TestState>();

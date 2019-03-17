@@ -50,7 +50,7 @@ private:
 	void update(const sf::Time &delta, bool staticUpdate);
 	void render();
 
-	friend Application *Singleton<Application>::getInstance();
+	friend Application *Singleton<Application>::get();
 
 private:
 	std::string m_appName;

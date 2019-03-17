@@ -43,7 +43,7 @@ template <typename T>
 class Singleton : public NonCopyable
 {
 public:
-	static T *getInstance() {
+	static T *get() {
 		static std::unique_ptr<T> instance{new T{}};
 		return instance.get();
 	}

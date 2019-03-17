@@ -224,12 +224,12 @@ void Input::onFocusOut_callback()
 
 void Input::onHoverIn_callback(sf::Vector2i)
 {
-	Application::getInstance()->window().setCursor(sf::Cursor::Text);
+	Application::get()->window().setCursor(sf::Cursor::Text);
 }
 
 void Input::onHoverOut_callback(sf::Vector2i)
 {
-	Application::getInstance()->window().setCursor(sf::Cursor::Arrow);
+	Application::get()->window().setCursor(sf::Cursor::Arrow);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

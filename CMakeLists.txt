@@ -69,6 +69,7 @@ set(SOURCES
 	./extern/imgui/imgui-SFML.h
 	./extern/imgui/imgui.cpp
 	./extern/imgui/imgui.h
+	./extern/imgui/imgui_demo.cpp
 	./extern/imgui/imgui_draw.cpp
 	./extern/imgui/imgui_internal.h
 	./extern/imgui/imgui_widgets.cpp

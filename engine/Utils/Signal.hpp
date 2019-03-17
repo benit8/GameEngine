@@ -26,7 +26,6 @@ class Signal
 	class ISlot
 	{
 	public:
-		virtual ~ISlot() {}
 		virtual void emit(Args...) = 0;
 	};
 
@@ -38,8 +37,6 @@ class Signal
 		Slot_STLFunction(std::function<void(Args...)> function)
 		: m_function(function)
 		{}
-
-		~Slot_STLFunction() override {}
 
 		void emit(Args... args) override {
 			m_function(std::forward<Args>(args)...);
@@ -60,8 +57,6 @@ class Signal
 		, m_classMember(classMember)
 		{}
 
-		~Slot_ClassMember() override {}
-
 		void emit(Args... args) override {
 			(m_classPtr->*m_classMember)(std::forward<Args>(args)...);
 		}
@@ -80,8 +75,6 @@ class Signal
 		: m_function(function)
 		{}
 
-		~Slot_Function() override {}
-
 		void emit(Args... args) override {
 			(*m_function)(std::forward<Args>(args)...);
 		}
@@ -97,7 +90,8 @@ public:
 	typedef std::list<SlotPtr> SlotContainer;
 
 public:
-	Signal() {}
+	Signal()
+	{}
 
 public:
 	void connect(std::function<void(Args...)> function) {
