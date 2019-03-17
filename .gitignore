@@ -1,5 +1,6 @@
 *~
 *#
 *.o
-engine
+exe
 imgui.ini
+build/

@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2018
-** NETiles
+** GameEngine
 ** File description:
-** Core / tests / main.cpp
+** tests / main.cpp
 */
 
 #include "Application.hpp"
@@ -16,9 +16,8 @@ public:
 	TestState()
 	{
 		m_events.onResize(BIND1(TestState::resized));
-
-		m_events.onKeyDown([&]() { Application::getInstance()->close(); }, sf::Keyboard::Escape);
 		m_events.onKeyDown(BIND(TestState::switchFullscreen), sf::Keyboard::F11);
+		m_events.onKeyDown([&]() { Application::getInstance()->close(); }, sf::Keyboard::Escape);
 
 		onInitialize.connect(this, &TestState::initialize);
 		onUpdate.connect(this, &TestState::makeGUI);

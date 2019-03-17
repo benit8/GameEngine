@@ -10,25 +10,24 @@ CC	=	g++
 
 ################################################################################
 
-NAME	=	engine
+NAME	=	exe
 
 SRCS	=	extern/stb/stb_image.cpp		\
+		extern/imgui/imgui-SFML.cpp		\
 		extern/imgui/imgui.cpp			\
 		extern/imgui/imgui_draw.cpp		\
 		extern/imgui/imgui_widgets.cpp		\
-		extern/imgui/imgui-SFML.cpp		\
-		extern/imgui/imgui_demo.cpp		\
-		main.cpp				\
-		src/Application.cpp			\
-		src/EventDispatcher.cpp			\
-		src/StateManager.cpp			\
-		src/States/State.cpp			\
-		src/Graphics/AnimatedSprite.cpp		\
-		src/Graphics/Animation.cpp		\
-		src/Graphics/FPSCounter.cpp		\
-		src/Graphics/FontLoader.cpp		\
-		src/Graphics/GIF.cpp			\
-		src/Graphics/Window.cpp			\
+		tests/main.cpp				\
+		engine/Application.cpp			\
+		engine/EventDispatcher.cpp		\
+		engine/Graphics/AnimatedSprite.cpp	\
+		engine/Graphics/Animation.cpp		\
+		engine/Graphics/FPSCounter.cpp		\
+		engine/Graphics/FontLoader.cpp		\
+		engine/Graphics/GIF.cpp			\
+		engine/Graphics/Window.cpp		\
+		engine/StateManager.cpp			\
+		engine/States/State.cpp			\
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -36,7 +35,7 @@ OBJS	=	$(SRCS:.cpp=.o)
 
 CXXFLAGS	+=	-std=c++17
 CXXFLAGS	+=	-W -Wall -Wextra
-CXXFLAGS	+=	-I. -Isrc -Iextern
+CXXFLAGS	+=	-Iengine -Iextern
 
 LDFLAGS	+=	-lsfml-system -lsfml-window -lsfml-graphics -lGL
 
