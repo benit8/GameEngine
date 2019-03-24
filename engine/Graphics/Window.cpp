@@ -5,89 +5,83 @@
 ** Window.cpp
 */
 
+#include <map>
 #include "Window.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 Window::Window()
 : sf::RenderWindow()
-, m_mode(Windowed)
+, m_mode(Undefined)
 , m_title("")
-, m_startupSize(800, 600)
+, m_startupSize(getDefaultSize())
 {
-	auto dm = sf::VideoMode::getDesktopMode();
-	m_startupSize.x = dm.width;
-	m_startupSize.y = dm.height;
 }
 
-Window::Window(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
-: sf::RenderWindow(videoMode, title, styles, settings)
-, m_mode(Windowed)
-, m_title("")
-, m_startupSize(800, 600)
-{
-	auto dm = sf::VideoMode::getDesktopMode();
-	m_startupSize.x = dm.width;
-	m_startupSize.y = dm.height;
-}
-
-Window::~Window()
+Window::Window(const std::string &title, Mode mode, sf::Vector2u size)
+: sf::RenderWindow(sf::VideoMode(size.x, size.y), title, styleFromMode(mode), sf::ContextSettings(24, 8, 0, 3, 0))
+, m_mode(mode)
+, m_title(title)
+, m_startupSize(size)
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Window::open(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
+void Window::open(const std::string &title, Mode mode, sf::Vector2u size)
 {
-	create(videoMode, title, styles, settings);
+	if (mode == Undefined && m_mode != Undefined)
+		mode = m_mode;
+	if (size.x == 0 || size.y == 0)
+		size = m_startupSize;
+
+	openSF(title, sf::VideoMode(size.x, size.y), styleFromMode(mode));
+	m_mode = mode;
 }
 
-void Window::open(const std::string &title, sf::Vector2u windowSize, sf::Uint32 styles, const sf::ContextSettings &settings)
+void Window::openWindowed(sf::Vector2u size)
 {
-	if (windowSize.x == 0 && windowSize.y == 0)
-		windowSize = m_startupSize;
-	open(title, sf::VideoMode(windowSize.x, windowSize.y), styles, settings);
+	if (size.x == 0 || size.y == 0)
+		size = m_startupSize;
+	openSF(title(), sf::VideoMode(size.x, size.y), sf::Style::Default);
 }
 
-void Window::openBorderless(const std::string &title)
+void Window::openBorderless()
 {
-	open(title, sf::VideoMode::getFullscreenModes()[0], sf::Style::None);
+	openSF(title(), sf::VideoMode::getFullscreenModes()[0], sf::Style::None);
 }
 
-void Window::openFullscreen(const std::string &title)
+void Window::openFullscreen()
 {
-	open(title, sf::VideoMode::getFullscreenModes()[0], sf::Style::Fullscreen);
+	openSF(title(), sf::VideoMode::getFullscreenModes()[0], sf::Style::Fullscreen);
 }
 
 
-void Window::setMode(Mode mode, const sf::Vector2u &_size)
+void Window::setMode(Mode mode, sf::Vector2u size)
 {
-	sf::Vector2u size = (_size.x == 0 || _size.y == 0) ? m_startupSize : _size;
-	sf::Vector2u currentSize = getSize();
+	if (mode == Undefined)
+		mode = Windowed;
+	if (size.x == 0 || size.y == 0)
+		size = getDefaultSize();
 
-	if (isOpen()) {
-		switch (mode) {
-			case Windowed:
-				if (mode == m_mode && size != currentSize)
-					setSize(size);
-				else
-					open(title(), sf::VideoMode(size.x, size.y));
-				break;
-			case Borderless:
-				if (m_mode != Borderless)
-					openBorderless(title());
-				break;
-			case Fullscreen:
-				if (m_mode != Fullscreen)
-					openFullscreen(title());
-				break;
-		}
-	}
-	else {
+	if (!isOpen()) {
+		m_mode = mode;
 		m_startupSize = size;
 	}
+	else {
+		if (mode == m_mode) {
+			if (mode == Windowed && size != getSize())
+				setSize(size);
+			return;
+		}
 
-	m_mode = mode;
+		switch (mode) {
+			default:
+			case Windowed:   openWindowed(size); break;
+			case Borderless: openBorderless();   break;
+			case Fullscreen: openFullscreen();   break;
+		}
+	}
 }
 
 
@@ -110,4 +104,44 @@ void Window::setCursor(sf::Cursor::Type type)
 
 	if (cursor.loadFromSystem(type))
 		setMouseCursor(cursor);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void Window::openSF(const std::string &title, sf::VideoMode videoMode, sf::Uint32 styles, const sf::ContextSettings &settings)
+{
+	create(videoMode, title, styles, settings);
+	m_mode = modeFromStyle(styles);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+sf::Uint32 Window::styleFromMode(Mode &mode)
+{
+	static std::map<Mode, sf::Uint32> modes = {
+		{Windowed, sf::Style::Default},
+		{Borderless, sf::Style::None},
+		{Fullscreen, sf::Style::Fullscreen}
+	};
+
+	if (mode == Undefined)
+		mode = Windowed;
+
+	return modes[mode];
+}
+
+Window::Mode Window::modeFromStyle(sf::Uint32 style)
+{
+	if (style & sf::Style::Fullscreen)
+		return Fullscreen;
+	else if ((style & sf::Style::Titlebar) || (style & sf::Style::Resize) || (style & sf::Style::Close))
+		return Windowed;
+	else
+		return Borderless;
+}
+
+sf::Vector2u Window::getDefaultSize()
+{
+	auto dm = sf::VideoMode::getDesktopMode();
+	return sf::Vector2u(dm.width, dm.height);
 }

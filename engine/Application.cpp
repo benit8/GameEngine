@@ -67,7 +67,8 @@ void Application::close()
 
 void Application::launch()
 {
-	m_window.open(m_appName, sf::Vector2u(0, 0));
+	if (!m_window.isOpen())
+		m_window.open(m_appName);
 
 	ImGui::SFML::Init(m_window);
 
@@ -78,9 +79,6 @@ void Application::processEvents()
 {
 	sf::Event e;
 	while (m_window.pollEvent(e)) {
-		for (auto &state : getActiveStates())
-			state->handleEvent(e);
-
 		switch (e.type) {
 			case sf::Event::Closed:
 				m_shouldClose = true;
@@ -88,9 +86,20 @@ void Application::processEvents()
 			case sf::Event::Resized:
 				m_window.setView(sf::View(sf::FloatRect(0, 0, e.size.width, e.size.height)));
 				break;
+			case sf::Event::KeyPressed:
+				if (e.key.code == sf::Keyboard::F11) {
+					if (m_window.getMode() == Window::Fullscreen)
+						m_window.setMode(Window::Windowed);
+					else
+						m_window.setMode(Window::Fullscreen);
+				}
+				break;
 			default:
 				break;
 		}
+
+		for (auto &state : getActiveStates())
+			state->handleEvent(e);
 	}
 }
 

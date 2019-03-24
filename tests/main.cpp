@@ -10,11 +10,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int main(void)
+int main(/*int argc, char **argv*/)
 {
-	Application *app = Application::get();
+	Application *app = Application::instance();
+	// app->parseOptions(argc, argv);
 	app->appName("Engine");
-	app->window().setMode(Window::Windowed/*, {1280, 720}*/);
+	// app->window().setMode(Window::Borderless);
 	app->pushState<States::Test>();
 
 	return app->run();

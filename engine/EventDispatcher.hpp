@@ -34,10 +34,10 @@ class EventDispatcher;
 // Only for callbacks binding
 using namespace std::placeholders;
 
-#define BIND(C)  std::bind(&C, this)
-#define BIND1(C) std::bind(&C, this, _1)
-#define BIND2(C) std::bind(&C, this, _1, _2)
-#define BIND3(C) std::bind(&C, this, _1, _2, _3)
+#define BIND(M)		std::bind(&M, this)
+#define BIND1(M)	std::bind(&M, this, _1)
+#define BIND2(M)	std::bind(&M, this, _1, _2)
+#define BIND3(M)	std::bind(&M, this, _1, _2, _3)
 
 ////////////////////////////////////////////////////////////////////////////////
 

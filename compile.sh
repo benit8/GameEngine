@@ -1,21 +1,19 @@
 #!/bin/sh
 
+ncore=$(echo "`grep -c ^processor /proc/cpuinfo`+1" | bc)
 bin="exe"
 
 # does `./build` directory exists ?
-if [ -d ./build ]; then
-	rm -rf ./build
+if [ ! -d ./build ]; then
+	mkdir ./build
 fi
 
 # does the zia bin exists ?
-if [ -f "./$bin" ]; then
-	rm "./$bin"
-fi
+# if [ -f "./$bin" ]; then
+# 	rm "./$bin"
+# fi
 
-ncore=$(echo "`grep -c ^processor /proc/cpuinfo`+1" | bc)
-
-mkdir ./build && cd ./build &&
-# conan install .. --build=missing &&
+cd ./build &&
 cmake .. -G "Unix Makefiles" &&
 cmake --build . -- -j "$ncore" &&
 

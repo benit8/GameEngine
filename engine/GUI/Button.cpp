@@ -106,13 +106,13 @@ void Button::centerLabel()
 void Button::onHoverIn_callback(sf::Vector2i)
 {
 	m_zone.setOutlineColor(sf::Color::White);
-	Application::get()->window().setCursor(sf::Cursor::Hand);
+	Application::instance()->window().setCursor(sf::Cursor::Hand);
 }
 
 void Button::onHoverOut_callback(sf::Vector2i)
 {
 	m_zone.setOutlineColor(sf::Color(170, 170, 170));
-	Application::get()->window().setCursor(sf::Cursor::Arrow);
+	Application::instance()->window().setCursor(sf::Cursor::Arrow);
 }
 
 void Button::onClick_callback(sf::Vector2i)

@@ -45,12 +45,13 @@ public:
 	void activate();
 	void deactivate();
 
+	void setModal(bool m) { m_modal = m; }
+	void setFullscreen(bool f) { m_fullscreen = f; }
+
 	bool isInitialized() const { return m_initialized; }
 	bool isActive() const { return m_active; }
 	bool isModal() const { return m_modal; }
-	void setModal(bool _) { m_modal = _; }
 	bool isFullscreen() const { return m_fullscreen; }
-	void setFullscreen(bool _) { m_fullscreen = _; }
 
 	Signal<> onActivate;
 	Signal<> onDeactivate;

@@ -9,6 +9,7 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(GameEngine VERSION 0.1.0)
 
+add_definitions("-g3")
 add_definitions("-fPIC")
 add_definitions("-W -Wall -Wextra")
 include_directories(engine extern)
@@ -29,22 +30,14 @@ set(SOURCES
 	./engine/EventListeners/MouseWheel.hpp
 	./engine/EventListeners/Resize.hpp
 	./engine/EventListeners/Text.hpp
-	# ./engine/GUI/Box.cpp
-	# ./engine/GUI/Box.hpp
-	# ./engine/GUI/Button.cpp
-	# ./engine/GUI/Button.hpp
-	# ./engine/GUI/Env.cpp
-	# ./engine/GUI/Env.hpp
-	# ./engine/GUI/GUI.cpp
-	# ./engine/GUI/GUI.hpp
-	# ./engine/GUI/Input.cpp
-	# ./engine/GUI/Input.hpp
-	# ./engine/GUI/MessageBox.cpp
-	# ./engine/GUI/MessageBox.hpp
-	# ./engine/GUI/Modal.cpp
-	# ./engine/GUI/Modal.hpp
-	# ./engine/GUI/Widget.cpp
-	# ./engine/GUI/Widget.hpp
+	./engine/GUI/Background.cpp
+	./engine/GUI/Background.hpp
+	./engine/GUI/Env.cpp
+	./engine/GUI/Env.hpp
+	./engine/GUI/GUI.cpp
+	./engine/GUI/GUI.hpp
+	./engine/GUI/Widget.cpp
+	./engine/GUI/Widget.hpp
 	./engine/Graphics/AnimatedSprite.cpp
 	./engine/Graphics/AnimatedSprite.hpp
 	./engine/Graphics/Animation.cpp
@@ -76,11 +69,13 @@ set(SOURCES
 	./extern/imgui/imstb_rectpack.h
 	./extern/imgui/imstb_textedit.h
 	./extern/imgui/imstb_truetype.h
+	./extern/json/json.hpp
 	./extern/stb/stb_gif.h
 	./extern/stb/stb_image.cpp
 	./extern/stb/stb_image.h
 
 	./tests/main.cpp
+	./tests/States/Test.hpp
 )
 
 add_executable(exe ${SOURCES})

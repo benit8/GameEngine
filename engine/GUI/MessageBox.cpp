@@ -37,7 +37,7 @@ MessageBox::~MessageBox()
 	for (auto it = m_buttons.begin(); it != m_buttons.end(); ++it)
 		delete *it;
 
-	Application::get()->window().setCursor(sf::Cursor::Arrow);
+	Application::instance()->window().setCursor(sf::Cursor::Arrow);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ void MessageBox::draw(sf::RenderTarget &rt)
 
 void MessageBox::constructGeometry(const std::vector<ButtonType> &buttons)
 {
-	unsigned maxWidth = Application::get()->window().width() * 0.75f;
+	unsigned maxWidth = Application::instance()->window().width() * 0.75f;
 
 	float w = 0;
 	for (size_t i = 0; i < m_rawText.length(); ++i) {
@@ -76,7 +76,7 @@ void MessageBox::constructGeometry(const std::vector<ButtonType> &buttons)
 		std::max(175.f, textBounds.height + 102)
 	);
 
-	updatePositions(Application::get()->window().getSize());
+	updatePositions(Application::instance()->window().getSize());
 
 	w = 0;
 	for (auto it = m_buttons.begin(); it != m_buttons.end(); ++it) {

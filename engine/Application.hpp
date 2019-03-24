@@ -37,7 +37,7 @@ public:
 	int run();
 	void close();
 
-	bool running() const { return !m_shouldClose; }
+	bool running() const { return !m_shouldClose && m_window.isOpen(); }
 	void appName(const std::string &name) { m_appName = name; }
 	const std::string &appName() const { return m_appName; }
 	Window &window() { return m_window; }
@@ -50,13 +50,12 @@ private:
 	void update(const sf::Time &delta, bool staticUpdate);
 	void render();
 
-	friend Application *Singleton<Application>::get();
+	friend Application *Singleton<Application>::instance();
 
 private:
 	std::string m_appName;
 	bool m_shouldClose;
 
 	Window m_window;
-
 	FPSCounter m_fpsCounter;
 };
