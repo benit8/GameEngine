@@ -14,8 +14,7 @@ int main(/*int argc, char **argv*/)
 {
 	Application *app = Application::instance();
 	// app->parseOptions(argc, argv);
-	app->appName("Engine");
-	// app->window().setMode(Window::Borderless);
+	app->name("Engine");
 	app->pushState<States::Test>();
 
 	return app->run();

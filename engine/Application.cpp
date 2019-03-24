@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 Application::Application()
-: m_appName("Application")
+: m_name("Application")
 , m_shouldClose(false)
 {
 	m_fpsCounter.setLimit(60);
@@ -68,7 +68,7 @@ void Application::close()
 void Application::launch()
 {
 	if (!m_window.isOpen())
-		m_window.open(m_appName);
+		m_window.open(m_name);
 
 	ImGui::SFML::Init(m_window);
 

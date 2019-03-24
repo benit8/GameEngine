@@ -38,8 +38,8 @@ public:
 	void close();
 
 	bool running() const { return !m_shouldClose && m_window.isOpen(); }
-	void appName(const std::string &name) { m_appName = name; }
-	const std::string &appName() const { return m_appName; }
+	void name(const std::string &name) { m_name = name; }
+	const std::string &name() const { return m_name; }
 	Window &window() { return m_window; }
 
 private:
@@ -53,7 +53,7 @@ private:
 	friend Application *Singleton<Application>::instance();
 
 private:
-	std::string m_appName;
+	std::string m_name;
 	bool m_shouldClose;
 
 	Window m_window;
