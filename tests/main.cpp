@@ -6,16 +6,15 @@
 */
 
 #include "Application.hpp"
-#include "States/Test.hpp"
+#include "States/Menu.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(/*int argc, char **argv*/)
 {
 	Application *app = Application::instance();
-	// app->parseOptions(argc, argv);
 	app->name("Engine");
-	app->pushState<States::Test>();
+	app->pushState<States::Menu>();
 
 	return app->run();
 }

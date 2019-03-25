@@ -12,6 +12,7 @@
 StateManager::StateManager()
 : m_swap(nullptr)
 , m_flags(0)
+, m_active(false)
 {
 }
 
@@ -24,17 +25,23 @@ StateManager::~StateManager()
 
 void StateManager::pushState(State::Ptr state)
 {
-	if (!state->isInitialized())
-		state->initialize();
-	state->activate();
+	if (m_active) {
+		if (!state->isInitialized())
+			state->initialize();
+		state->activate();
+	}
+
 	m_states.push_back(std::move(state));
 }
 
 void StateManager::swapState(State::Ptr state)
 {
-	if (!state->isInitialized())
-		state->initialize();
-	state->activate();
+	if (m_active) {
+		if (!state->isInitialized())
+			state->initialize();
+		state->activate();
+	}
+
 	m_swap = std::move(state);
 	m_flags |= Pop | Swap;
 }
@@ -45,6 +52,18 @@ void StateManager::popState()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+void StateManager::initializeStates()
+{
+	if (m_active)
+		return;
+
+	for (auto &state : m_states)
+		state->initialize();
+	m_states.back()->activate();
+
+	m_active = true;
+}
 
 void StateManager::updateStates()
 {

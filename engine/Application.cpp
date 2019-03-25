@@ -72,6 +72,7 @@ void Application::launch()
 
 	ImGui::SFML::Init(m_window);
 
+	initializeStates();
 	m_fpsCounter.reset();
 }
 

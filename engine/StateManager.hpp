@@ -26,8 +26,8 @@ class StateManager
 public:
 	enum Flags
 	{
-		Pop	= (1 << 0),
-		Swap	= (1 << 1),
+		Pop  = (1 << 0),
+		Swap = (1 << 1),
 	};
 
 public:
@@ -49,12 +49,14 @@ public:
 	std::list<State *> getVisibleStates();
 
 protected:
+	void initializeStates();
 	void updateStates();
 
 private:
 	std::list<State::Ptr> m_states;
 	State::Ptr m_swap;
 	int m_flags;
+	bool m_active;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

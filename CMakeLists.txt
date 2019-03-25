@@ -75,6 +75,7 @@ set(SOURCES
 	./extern/stb/stb_image.h
 
 	./tests/main.cpp
+	./tests/States/Menu.hpp
 	./tests/States/Test.hpp
 )
 
