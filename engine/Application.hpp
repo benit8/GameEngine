@@ -29,7 +29,7 @@ class Application;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class Application : public StateManager, public Singleton<Application>
+class Application : public Singleton<Application>, public StateManager
 {
 public:
 	~Application();
@@ -41,6 +41,8 @@ public:
 	void name(const std::string &name) { m_name = name; }
 	const std::string &name() const { return m_name; }
 	Window &window() { return m_window; }
+	void args(int argc, char **argv) { m_binName = argv[0]; m_args.assign(argv + 1, argv + argc); }
+	const std::vector<std::string> &args() { return m_args; }
 
 private:
 	Application();
@@ -54,6 +56,8 @@ private:
 
 private:
 	std::string m_name;
+	std::string m_binName;
+	std::vector<std::string> m_args;
 	bool m_shouldClose;
 
 	Window m_window;
