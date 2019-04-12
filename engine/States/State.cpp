@@ -9,7 +9,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-State::State()
+State::State(const std::string &name)
+: m_name(name)
+, m_guiContext(ImGui::CreateContext(ImGui::GetCurrentContext() ? ImGui::GetIO().Fonts : NULL))
 {
 }
 
@@ -25,29 +27,57 @@ void State::initialize()
 		return;
 	m_initialized = true;
 
+	ImGuiContext *_prevContext = ImGui::GetCurrentContext();
+	ImGui::SetCurrentContext(m_guiContext);
 	onInitialize();
+	ImGui::SetCurrentContext(_prevContext);
 }
 
 void State::handleEvent(const sf::Event &e)
 {
-	ImGui::SFML::ProcessEvent(e);
+	ImGuiContext *_prevContext = ImGui::GetCurrentContext();
+	ImGui::SetCurrentContext(m_guiContext);
 
+	ImGui::SFML::ProcessEvent(e);
 	m_events.dispatchEvent(e);
+
+	ImGui::SetCurrentContext(_prevContext);
 }
 
-void State::update(const sf::Time &delta)
+void State::update(const sf::Time &delta, sf::RenderWindow &window, bool updateGui)
 {
+	ImGuiContext *_prevContext = ImGui::GetCurrentContext();
+	ImGui::SetCurrentContext(m_guiContext);
+
+	if (updateGui)
+		ImGui::SFML::Update(window, delta);
+	else
+		ImGui::NewFrame();
 	onUpdate(delta);
+	ImGui::EndFrame();
+
+	ImGui::SetCurrentContext(_prevContext);
 }
 
 void State::staticUpdate(const sf::Time &delta)
 {
+	ImGuiContext *_prevContext = ImGui::GetCurrentContext();
+	ImGui::SetCurrentContext(m_guiContext);
+
 	onStaticUpdate(delta);
+
+	ImGui::SetCurrentContext(_prevContext);
 }
 
 void State::render(sf::RenderTarget &renderTarget)
 {
+	ImGuiContext *_prevContext = ImGui::GetCurrentContext();
+	ImGui::SetCurrentContext(m_guiContext);
+
 	onRender(renderTarget);
+	ImGui::SFML::Render(renderTarget);
+
+	ImGui::SetCurrentContext(_prevContext);
 }
 
 void State::activate()

@@ -16,7 +16,7 @@ namespace GUI {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Widget.hpp"
-#include "Box.hpp"
+#include "Background.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ public:
 
 private:
 	Widget *m_previousModal;
-	Box m_back;
+	Background m_back;
 	bool m_opened;
 	bool m_suicidal; // Does it deletes itself upon destruction ?
 };

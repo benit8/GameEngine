@@ -12,8 +12,8 @@
 Application::Application()
 : m_name("Application")
 , m_shouldClose(false)
+, m_fpsCounter(60)
 {
-	m_fpsCounter.setLimit(60);
 }
 
 Application::~Application()
@@ -33,7 +33,7 @@ int Application::run()
 	while (running()) {
 		sf::Time elapsed = timer.restart();
 		updateTimer += elapsed;
-		m_fpsCounter.addFrameTime(elapsed);
+		m_fpsCounter += elapsed;
 		update(elapsed, false);
 
 		bool shouldRender = false;
@@ -49,7 +49,7 @@ int Application::run()
 			render();
 			m_window.display();
 
-			m_fpsCounter.incrementFrameCount();
+			m_fpsCounter++;
 		}
 
 		updateStates();
@@ -101,19 +101,18 @@ void Application::processEvents()
 
 		for (auto &state : getActiveStates())
 			state->handleEvent(e);
+		// getCurrentState()->handleEvent(e);
 	}
 }
 
 void Application::update(const sf::Time &delta, bool staticUpdate)
 {
-	for (auto &state : getActiveStates()) {
+	auto subset = getActiveStates();
+	for (auto &state : subset) {
 		if (staticUpdate)
 			state->staticUpdate(delta);
-		else {
-			ImGui::SFML::Update(m_window, delta);
-			state->update(delta);
-			ImGui::EndFrame();
-		}
+		else
+			state->update(delta, m_window, state == subset.front());
 	}
 }
 
@@ -121,8 +120,6 @@ void Application::render()
 {
 	for (auto &state : getVisibleStates())
 		state->render(m_window);
-
-	ImGui::SFML::Render(m_window);
 
 	m_fpsCounter.render(m_window);
 }

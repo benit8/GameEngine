@@ -25,7 +25,7 @@ MessageBox::MessageBox()
 
 MessageBox::MessageBox(const std::string &text, const std::vector<ButtonType> &buttons)
 : Modal()
-, m_font(GUI::getDefaultFont())
+, m_font(FontLoader::getDefault())
 , m_rawText(text)
 , m_text("", m_font, 18)
 {

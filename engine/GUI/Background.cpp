@@ -16,6 +16,7 @@ namespace GUI
 
 Background::Background()
 : m_bgMode(Cover)
+, m_color(sf::Color::Transparent)
 , m_anim(nullptr)
 {
 	m_mode = Visible;
@@ -32,6 +33,10 @@ Background::~Background()
 
 void Background::update(const sf::Time &delta)
 {
+	m_zone.setFillColor(m_bgMode == Color ? m_color : sf::Color::White);
+	if (m_bgMode == Color) // We don't need to do anything
+		return;
+
 	if (m_anim != nullptr) {
 		m_anim->update(delta);
 		if (m_anim->targetUpdate()) {
@@ -83,6 +88,11 @@ void Background::resize(sf::Vector2u size)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+void Background::setColor(const sf::Color &color)
+{
+	m_color = color;
+}
 
 bool Background::setImage(const std::string &path, BGMode mode)
 {
@@ -146,6 +156,7 @@ void Background::setMode(BGMode mode)
 {
 	m_bgMode = mode;
 	m_texture.setRepeated(m_bgMode == Tiled);
+	m_zone.setTexture(m_bgMode == Color ? nullptr : &m_texture);
 	update(sf::Time::Zero);
 }
 

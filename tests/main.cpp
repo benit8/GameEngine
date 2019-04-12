@@ -10,10 +10,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int main(/*int argc, char **argv*/)
+int main(int argc, char **argv)
 {
 	Application *app = Application::instance();
 	app->name("Engine");
+	app->args(argc, argv);
 	app->pushState<States::Menu>();
 
 	return app->run();

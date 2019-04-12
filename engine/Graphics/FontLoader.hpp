@@ -41,6 +41,7 @@ private:
 	~FontLoader();
 
 public:
+	static sf::Font getDefault();
 	static bool loadFromSystem(sf::Font &font, const std::string &name);
 
 private:

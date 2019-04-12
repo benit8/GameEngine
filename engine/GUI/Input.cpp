@@ -21,7 +21,7 @@ Input::Input()
 : m_cursorIndex(0)
 , m_valueOffset(0)
 {
-	setFont(GUI::getDefaultFont());
+	setFont(FontLoader::getDefault());
 	setSize(sf::Vector2f(300, 35));
 	setCharacterSize(18);
 

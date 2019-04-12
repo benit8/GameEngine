@@ -25,8 +25,7 @@ class FPSCounter;
 class FPSCounter
 {
 public:
-	FPSCounter();
-	~FPSCounter() = default;
+	FPSCounter(unsigned limit = 120);
 
 public:
 	void reset();
@@ -36,20 +35,19 @@ public:
 	void render(sf::RenderTarget &rt);
 	void toggleDisplay();
 
-	unsigned getFPS() const;
-	unsigned getRealFPS() const;
-	unsigned getLimit() const;
-	sf::Time getFrameTime() const;
+	unsigned getFPS() const { return m_fps; }
+	unsigned getLimit() const { return m_limit; }
+	const sf::Time &getFrameTime() const { return m_frameTime; }
+
+	FPSCounter &operator ++(int) { incrementFrameCount(); return *this; }
+	FPSCounter &operator +=(const sf::Time &elapsed) { addFrameTime(elapsed); return *this; }
 
 private:
-	sf::Clock m_clock;
-	sf::Time m_secondCounter;
+	unsigned m_limit, m_frames, m_fps;
+	sf::Time m_counter;
 	sf::Time m_frameTime;
-	unsigned m_limit, m_frames, m_realFps, m_fps;
 
-	sf::Text m_fpsText;
 	sf::Font m_fpsTextFont;
-	std::string m_fpsTextFontName;
-	bool m_fontLoaded;
+	sf::Text m_fpsText;
 	bool m_shouldDisplay;
 };

@@ -23,7 +23,7 @@ Modal::Modal()
 	m_eventDispatcher.onResize(BIND1(Modal::updatePositions));
 	m_eventDispatcher.onKeyDown(BIND(Modal::close), sf::Keyboard::Escape);
 
-	m_back.setBackgroundColor(sf::Color(0, 0, 0, 150));
+	m_back.setColor(sf::Color(0, 0, 0, 150));
 	m_zone.setFillColor(sf::Color::Black);
 	m_zone.setOutlineThickness(1);
 }

@@ -26,8 +26,9 @@ class StateManager
 public:
 	enum Flags
 	{
-		Pop  = (1 << 0),
-		Swap = (1 << 1),
+		Push = 1 << 0,
+		Pop  = 1 << 1,
+		Swap = 1 << 2,
 	};
 
 public:
@@ -40,9 +41,9 @@ public:
 	template <typename T, typename... Args>
 	void swapState(Args&&... args);
 
-	void pushState(State::Ptr state);
-	void swapState(State::Ptr state);
+	void pushState(std::unique_ptr<State> state);
 	void popState();
+	void swapState(std::unique_ptr<State> state);
 
 	State *getCurrentState() const;
 	std::list<State *> getActiveStates();
@@ -53,8 +54,8 @@ protected:
 	void updateStates();
 
 private:
-	std::list<State::Ptr> m_states;
-	State::Ptr m_swap;
+	std::list<std::unique_ptr<State>> m_states;
+	std::unique_ptr<State> m_swap;
 	int m_flags;
 	bool m_active;
 };

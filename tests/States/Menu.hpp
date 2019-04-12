@@ -49,8 +49,6 @@ public:
 
 	void makeGUI(const sf::Time &)
 	{
-		// ImGui::GetIO().FontGlobalScale = 1.25f;
-
 		ImGui::SetNextWindowPosCenter();
 		ImGui::SetNextWindowSize({400, 200});
 		ImGui::Begin("Menu", NULL, ImGuiWindowFlags_NoDecoration);

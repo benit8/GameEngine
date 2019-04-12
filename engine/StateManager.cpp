@@ -23,24 +23,18 @@ StateManager::~StateManager()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void StateManager::pushState(State::Ptr state)
+void StateManager::pushState(std::unique_ptr<State> state)
 {
-	if (m_active) {
-		if (!state->isInitialized())
-			state->initialize();
-		state->activate();
-	}
+	if (m_active && !state->isInitialized())
+		state->initialize();
 
 	m_states.push_back(std::move(state));
 }
 
-void StateManager::swapState(State::Ptr state)
+void StateManager::swapState(std::unique_ptr<State> state)
 {
-	if (m_active) {
-		if (!state->isInitialized())
-			state->initialize();
-		state->activate();
-	}
+	if (m_active && !state->isInitialized())
+		state->initialize();
 
 	m_swap = std::move(state);
 	m_flags |= Pop | Swap;
@@ -68,15 +62,19 @@ void StateManager::initializeStates()
 void StateManager::updateStates()
 {
 	if (m_flags & Pop) {
+		m_flags &= ~Pop;
+
 		m_states.back()->deactivate();
 		m_states.pop_back();
-		m_flags &= ~Pop;
 
 		if (m_flags & Swap) {
 			m_flags &= ~Swap;
+
 			m_states.push_back(std::move(m_swap));
 			m_swap = nullptr;
 		}
+
+		m_states.back()->activate();
 	}
 }
 
@@ -92,32 +90,14 @@ State *StateManager::getCurrentState() const
 
 std::list<State *> StateManager::getActiveStates()
 {
-	std::list<State *> activeStates;
-
-	if (m_states.empty())
-		return activeStates;
-
-	auto it = m_states.end();
-	do {
-		--it;
-	} while (it != m_states.begin() && !(*it)->isFullscreen());
-
-	for (; it != m_states.end(); ++it)
-		activeStates.push_back(it->get());
-
-	return activeStates;
-}
-
-std::list<State *> StateManager::getVisibleStates()
-{
-	std::list<State *> visibleStates;
+	std::list<State *> subset;
 
 	auto it = m_states.rbegin();
 	for (; it != m_states.rend(); ++it) {
-		auto state = it->get();
+		State *state = it->get();
 		if (!state->isActive())
 			state->activate();
-		visibleStates.push_back(state);
+		subset.push_back(state);
 		if (state->isModal() || state->isFullscreen()) {
 			++it;
 			break;
@@ -125,10 +105,25 @@ std::list<State *> StateManager::getVisibleStates()
 	}
 
 	for (; it != m_states.rend(); ++it) {
-		auto state = it->get();
+		State *state = it->get();
 		if (state->isActive())
 			state->deactivate();
 	}
 
-	return visibleStates;
+	return subset;
+}
+
+std::list<State *> StateManager::getVisibleStates()
+{
+	std::list<State *> subset;
+
+	auto it = m_states.end();
+	do {
+		--it;
+	} while (it != m_states.begin() && !(*it)->isFullscreen());
+
+	for (; it != m_states.end(); ++it)
+		subset.push_back(it->get());
+
+	return subset;
 }

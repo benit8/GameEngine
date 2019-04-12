@@ -25,7 +25,7 @@ Button::Button()
 	m_zone.setOutlineThickness(1);
 	m_zone.setOutlineColor(sf::Color(170, 170, 170));
 
-	m_label.setFont(GUI::getDefaultFont());
+	m_label.setFont(FontLoader::getDefault());
 
 	setLabel("Button");
 	setLabelSize(18);

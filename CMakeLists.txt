@@ -32,6 +32,16 @@ set(SOURCES
 	./engine/EventListeners/Text.hpp
 	./engine/GUI/Background.cpp
 	./engine/GUI/Background.hpp
+	./engine/GUI/Box.cpp
+	./engine/GUI/Box.hpp
+	./engine/GUI/Button.cpp
+	./engine/GUI/Button.hpp
+	./engine/GUI/Input.cpp
+	./engine/GUI/Input.hpp
+	./engine/GUI/MessageBox.cpp
+	./engine/GUI/MessageBox.hpp
+	./engine/GUI/Modal.cpp
+	./engine/GUI/Modal.hpp
 	./engine/GUI/Env.cpp
 	./engine/GUI/Env.hpp
 	./engine/GUI/GUI.cpp

@@ -29,16 +29,13 @@ class State;
 class State
 {
 public:
-	typedef std::unique_ptr<State> Ptr;
-
-public:
-	State();
-	virtual ~State();
+	State(const std::string &name = "<unnamed state>");
+	~State();
 
 public:
 	void initialize();
 	void handleEvent(const sf::Event &e);
-	void update(const sf::Time &delta);
+	void update(const sf::Time &delta, sf::RenderWindow &window, bool updateGui = true);
 	void staticUpdate(const sf::Time &delta);
 	void render(sf::RenderTarget &renderTarget);
 
@@ -53,6 +50,8 @@ public:
 	bool isModal() const { return m_modal; }
 	bool isFullscreen() const { return m_fullscreen; }
 
+	const std::string &getName() { return m_name; }
+
 	Signal<> onActivate;
 	Signal<> onDeactivate;
 	Signal<> onInitialize;
@@ -61,10 +60,12 @@ public:
 	Signal<sf::RenderTarget &> onRender;
 
 protected:
+	std::string m_name;
 	EventDispatcher m_events;
+	ImGuiContext *m_guiContext;
 
 	bool m_initialized = false;
 	bool m_active = false;
-	bool m_modal = true;
-	bool m_fullscreen = true;
+	bool m_modal = true; // Prevents all states before this one to call `update()` methods
+	bool m_fullscreen = true; // Prevents all states before this one to call `render()`
 };
