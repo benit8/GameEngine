@@ -17,10 +17,12 @@ namespace GUI
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Input::Input()
-: m_cursorIndex(0)
+Input::Input(const std::string &id)
+: Widget(id)
+, m_cursorIndex(0)
 , m_valueOffset(0)
 {
+	setMode(Clickable);
 	setFont(FontLoader::getDefault());
 	setSize(sf::Vector2f(300, 35));
 	setCharacterSize(18);
@@ -41,15 +43,15 @@ Input::Input()
 	update(sf::Time::Zero);
 }
 
-Input::Input(const std::string &placeholder)
-: Input()
+Input::Input(const std::string &id, const std::string &placeholder)
+: Input(id)
 {
 	setPlaceholder(placeholder);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Input::draw(sf::RenderTarget &target)
+void Input::render(sf::RenderTarget &target)
 {
 	target.draw(m_zone);
 	if (m_value.empty())

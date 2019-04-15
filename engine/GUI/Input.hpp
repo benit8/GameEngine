@@ -25,11 +25,11 @@ namespace GUI
 class Input : public Widget
 {
 public:
-	Input();
-	Input(const std::string &placeholder);
+	Input(const std::string &id = "");
+	Input(const std::string &id, const std::string &placeholder);
 
 public:
-	void draw(sf::RenderTarget &target) override;
+	void render(sf::RenderTarget &target) override;
 	void update(const sf::Time &) override;
 
 	bool setFont(const std::string &fontPath);

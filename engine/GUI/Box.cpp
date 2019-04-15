@@ -15,10 +15,11 @@ namespace GUI
 ////////////////////////////////////////////////////////////////////////////////
 
 Box::Box()
-: m_backgroundMode(Cover)
+: Widget()
+, m_backgroundMode(Cover)
 , m_backgroundAnim(nullptr)
 {
-	m_mode = Visible;
+	setMode(Visible);
 	m_zone.setTexture(&m_background);
 }
 

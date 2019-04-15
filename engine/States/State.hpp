@@ -13,11 +13,10 @@ class State;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "EventDispatcher.hpp"
+#include "../EventDispatcher.hpp"
+#include "../Logger.hpp"
 #include "../Utils/Signal.hpp"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui-SFML.h"
+#include "../GUI/GUI.hpp"
 
 #include <memory>
 #include <SFML/System/Time.hpp>
@@ -35,9 +34,11 @@ public:
 public:
 	void initialize();
 	void handleEvent(const sf::Event &e);
-	void update(const sf::Time &delta, sf::RenderWindow &window, bool updateGui = true);
+	void update(const sf::Time &delta);
 	void staticUpdate(const sf::Time &delta);
 	void render(sf::RenderTarget &renderTarget);
+
+	const std::string &getName() { return m_name; }
 
 	void activate();
 	void deactivate();
@@ -50,7 +51,8 @@ public:
 	bool isModal() const { return m_modal; }
 	bool isFullscreen() const { return m_fullscreen; }
 
-	const std::string &getName() { return m_name; }
+	template <typename T, typename... Args>
+	std::shared_ptr<T> makeGUIElement(Args&&... args) { return m_guiRoot->makeChild<T>(std::forward<Args>(args)...); }
 
 	Signal<> onActivate;
 	Signal<> onDeactivate;
@@ -62,10 +64,12 @@ public:
 protected:
 	std::string m_name;
 	EventDispatcher m_events;
-	ImGuiContext *m_guiContext;
 
 	bool m_initialized = false;
 	bool m_active = false;
 	bool m_modal = true; // Prevents all states before this one to call `update()` methods
 	bool m_fullscreen = true; // Prevents all states before this one to call `render()`
+
+private:
+	std::unique_ptr<GUI::Root> m_guiRoot = nullptr;
 };

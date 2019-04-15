@@ -36,16 +36,14 @@ public:
 	virtual void open();
 	virtual void close();
 
-	bool isOpen();
-
-	void setSuicidal(bool suicidal);
-	bool isSuicidal() const;
+	bool isOpen() const { return m_opened; }
+	void deleteOnClose(bool d = true) { m_deleteOnClose = d; }
 
 private:
-	Widget *m_previousModal;
+	Widget *m_previousModal = nullptr;
+	bool m_opened = false;
+	bool m_deleteOnClose = false;
 	Background m_back;
-	bool m_opened;
-	bool m_suicidal; // Does it deletes itself upon destruction ?
 };
 
 }

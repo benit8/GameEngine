@@ -64,7 +64,7 @@ public:
 private:
 	void constructGeometry(const std::vector<ButtonType> &buttons);
 	float constructButtons(const std::vector<ButtonType> &buttons);
-	Button *createButton(ButtonType type);
+	std::shared_ptr<Button> createButton(ButtonType type);
 
 	void emitAccept(sf::Vector2i);
 	void emitReject(sf::Vector2i);
@@ -83,7 +83,7 @@ private:
 	sf::Font m_font;
 	std::string m_rawText;
 	sf::Text m_text;
-	std::list<Button *> m_buttons;
+	std::list<std::shared_ptr<Button>> m_buttons;
 };
 
 }

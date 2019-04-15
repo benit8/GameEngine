@@ -34,9 +34,6 @@ MessageBox::MessageBox(const std::string &text, const std::vector<ButtonType> &b
 
 MessageBox::~MessageBox()
 {
-	for (auto it = m_buttons.begin(); it != m_buttons.end(); ++it)
-		delete *it;
-
 	Application::instance()->window().setCursor(sf::Cursor::Arrow);
 }
 
@@ -80,7 +77,7 @@ void MessageBox::constructGeometry(const std::vector<ButtonType> &buttons)
 
 	w = 0;
 	for (auto it = m_buttons.begin(); it != m_buttons.end(); ++it) {
-		Button *b = *it;
+		std::shared_ptr<Button> b = *it;
 		w += b->width() + 20;
 		b->setPosition(width() - w, height() - b->height() - 20);
 	}
@@ -93,7 +90,7 @@ float MessageBox::constructButtons(const std::vector<ButtonType> &buttons)
 
 	float w = 0;
 	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
-		Button *b = createButton(*it);
+		auto b = createButton(*it);
 		w += b->width() + 20;
 		m_buttons.push_front(b);
 	}
@@ -101,10 +98,9 @@ float MessageBox::constructButtons(const std::vector<ButtonType> &buttons)
 	return w + 20;
 }
 
-Button *MessageBox::createButton(ButtonType type)
+std::shared_ptr<Button> MessageBox::createButton(ButtonType type)
 {
-	Button *button = new Button;
-	addChild(button);
+	auto button = makeChild<Button>();
 
 	switch (type) {
 		case Ok:
