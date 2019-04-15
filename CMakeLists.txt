@@ -20,6 +20,10 @@ set(SOURCES
 	./engine/Application.hpp
 	./engine/EventDispatcher.cpp
 	./engine/EventDispatcher.hpp
+	./engine/Logger.cpp
+	./engine/Logger.hpp
+	./engine/StateManager.cpp
+	./engine/StateManager.hpp
 	./engine/EventListeners/Close.hpp
 	./engine/EventListeners/Focus.hpp
 	./engine/EventListeners/IEventListener.hpp
@@ -32,20 +36,23 @@ set(SOURCES
 	./engine/EventListeners/Text.hpp
 	./engine/GUI/Background.cpp
 	./engine/GUI/Background.hpp
-	./engine/GUI/Box.cpp
-	./engine/GUI/Box.hpp
+#	./engine/GUI/Box.cpp
+#	./engine/GUI/Box.hpp
 	./engine/GUI/Button.cpp
 	./engine/GUI/Button.hpp
-	./engine/GUI/Input.cpp
-	./engine/GUI/Input.hpp
-	./engine/GUI/MessageBox.cpp
-	./engine/GUI/MessageBox.hpp
-	./engine/GUI/Modal.cpp
-	./engine/GUI/Modal.hpp
 	./engine/GUI/Env.cpp
 	./engine/GUI/Env.hpp
-	./engine/GUI/GUI.cpp
 	./engine/GUI/GUI.hpp
+	./engine/GUI/Input.cpp
+	./engine/GUI/Input.hpp
+#	./engine/GUI/MessageBox.cpp
+#	./engine/GUI/MessageBox.hpp
+#	./engine/GUI/Modal.cpp
+#	./engine/GUI/Modal.hpp
+	./engine/GUI/Parent.cpp
+	./engine/GUI/Parent.hpp
+	./engine/GUI/Root.cpp
+	./engine/GUI/Root.hpp
 	./engine/GUI/Widget.cpp
 	./engine/GUI/Widget.hpp
 	./engine/Graphics/AnimatedSprite.cpp
@@ -60,8 +67,6 @@ set(SOURCES
 	./engine/Graphics/GIF.hpp
 	./engine/Graphics/Window.cpp
 	./engine/Graphics/Window.hpp
-	./engine/StateManager.cpp
-	./engine/StateManager.hpp
 	./engine/States/State.cpp
 	./engine/States/State.hpp
 	./engine/Utils/Signal.hpp
@@ -85,7 +90,6 @@ set(SOURCES
 	./extern/stb/stb_image.h
 
 	./tests/main.cpp
-	./tests/States/Menu.hpp
 	./tests/States/Test.hpp
 )
 

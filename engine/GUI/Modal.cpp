@@ -16,10 +16,10 @@ namespace GUI
 ////////////////////////////////////////////////////////////////////////////////
 
 Modal::Modal()
-: m_previousModal(nullptr)
-, m_opened(false)
-, m_suicidal(false)
+: Widget()
 {
+	setMode(Clickable);
+
 	m_eventDispatcher.onResize(BIND1(Modal::updatePositions));
 	m_eventDispatcher.onKeyDown(BIND(Modal::close), sf::Keyboard::Escape);
 
@@ -32,9 +32,6 @@ Modal::~Modal()
 {
 	unfocus();
 	close();
-
-	if (m_suicidal)
-		delete this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,22 +66,9 @@ void Modal::close()
 
 	m_opened = false;
 	Env::modal = m_previousModal;
-}
 
-bool Modal::isOpen()
-{
-	return m_opened;
-}
-
-
-void Modal::setSuicidal(bool suicidal)
-{
-	m_suicidal = suicidal;
-}
-
-bool Modal::isSuicidal() const
-{
-	return m_suicidal;
+	if (m_deleteOnClose)
+		delete this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -27,15 +27,15 @@ namespace GUI
 class Button : public Widget
 {
 public:
-	Button();
-	Button(const std::string &label);
+	Button(const std::string &id = "");
+	Button(const std::string &id, const std::string &label);
 
 public:
-	virtual void draw(sf::RenderTarget &rt) override;
+	void render(sf::RenderTarget &rt) override;
 
-	void setLabel(const std::string &text, bool resize = false);
+	void setLabel(const std::string &text, bool resize = true);
 	const std::string getLabel() const;
-	void setLabelSize(unsigned int size, bool resize = false);
+	void setLabelSize(unsigned int size, bool resize = true);
 
 	virtual void setSize(const sf::Vector2f &size);
 
@@ -48,6 +48,7 @@ private:
 	void onRelease_callback(sf::Vector2i);
 
 private:
+	sf::Font m_font;
 	sf::Text m_label;
 };
 

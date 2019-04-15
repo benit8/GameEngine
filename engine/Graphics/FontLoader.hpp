@@ -48,6 +48,6 @@ private:
 	static bool searchFonts();
 
 private:
-	static bool s_loaded;
-	static std::vector<FontInfo> s_fonts;
+	static bool s_systemFontsLoaded;
+	static std::vector<FontInfo> s_systemFonts;
 };

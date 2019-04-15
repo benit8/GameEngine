@@ -18,14 +18,17 @@ namespace GUI
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Button::Button()
+Button::Button(const std::string &id)
+: Widget(id)
 {
-	setSize(sf::Vector2f(30, 10));
+	setMode(Clickable);
+	setSize({30, 10});
 	m_zone.setFillColor(sf::Color(0, 0, 0, 175));
 	m_zone.setOutlineThickness(1);
 	m_zone.setOutlineColor(sf::Color(170, 170, 170));
 
-	m_label.setFont(FontLoader::getDefault());
+	m_font = FontLoader::getDefault();
+	m_label.setFont(m_font);
 
 	setLabel("Button");
 	setLabelSize(18);
@@ -36,18 +39,16 @@ Button::Button()
 	onRelease.connect(this, &Button::onRelease_callback);
 }
 
-Button::Button(const std::string &label)
-: Button()
+Button::Button(const std::string &id, const std::string &label)
+: Button(id)
 {
 	setLabel(label);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Button::draw(sf::RenderTarget &rt)
+void Button::render(sf::RenderTarget &rt)
 {
-	centerLabel();
-
 	rt.draw(m_zone);
 	rt.draw(m_label);
 }
@@ -62,6 +63,8 @@ void Button::setLabel(const std::string &text, bool resize)
 		sf::FloatRect labelBounds = m_label.getLocalBounds();
 		setSize({labelBounds.width + 32, labelBounds.height + 14});
 	}
+
+	centerLabel();
 }
 
 const std::string Button::getLabel() const
@@ -77,6 +80,8 @@ void Button::setLabelSize(unsigned int size, bool resize)
 		sf::FloatRect labelBounds = m_label.getLocalBounds();
 		setSize({labelBounds.width + 32, labelBounds.height + 14});
 	}
+
+	centerLabel();
 }
 
 void Button::setSize(const sf::Vector2f &requestedSize)
@@ -87,6 +92,7 @@ void Button::setSize(const sf::Vector2f &requestedSize)
 	size.y = std::max(size.y, labelBounds.height);
 
 	Widget::setSize(size);
+	centerLabel();
 }
 
 

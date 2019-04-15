@@ -18,7 +18,6 @@ namespace Env
 {
 	bool foundTarget = false;
 	Widget *target = nullptr;
-	Widget *modal = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

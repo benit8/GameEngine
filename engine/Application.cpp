@@ -6,6 +6,7 @@
 */
 
 #include "Application.hpp"
+#include "Logger.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +20,6 @@ Application::Application()
 Application::~Application()
 {
 	m_window.close();
-	ImGui::SFML::Shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +55,8 @@ int Application::run()
 		updateStates();
 	}
 
+	Logger::warn() << "Application: shutting down" << std::endl;
+
 	return EXIT_SUCCESS;
 }
 
@@ -67,10 +69,10 @@ void Application::close()
 
 void Application::launch()
 {
+	Logger::info() << "Application: launching" << std::endl;
+
 	if (!m_window.isOpen())
 		m_window.open(m_name);
-
-	ImGui::SFML::Init(m_window);
 
 	initializeStates();
 	m_fpsCounter.reset();
@@ -86,6 +88,7 @@ void Application::processEvents()
 				break;
 			case sf::Event::Resized:
 				m_window.setView(sf::View(sf::FloatRect(0, 0, e.size.width, e.size.height)));
+				Logger::debug() << "Application: resized window to " << e.size.width << "x" << e.size.height << std::endl;
 				break;
 			case sf::Event::KeyPressed:
 				if (e.key.code == sf::Keyboard::F11) {
@@ -99,6 +102,7 @@ void Application::processEvents()
 				break;
 		}
 
+		// if (e.type == sf::Event::Closed || e.type == sf::Event::Resized)
 		for (auto &state : getActiveStates())
 			state->handleEvent(e);
 		// getCurrentState()->handleEvent(e);
@@ -107,12 +111,12 @@ void Application::processEvents()
 
 void Application::update(const sf::Time &delta, bool staticUpdate)
 {
-	auto subset = getActiveStates();
-	for (auto &state : subset) {
+	// auto subset = getActiveStates();
+	for (auto &state : getActiveStates()) {
 		if (staticUpdate)
 			state->staticUpdate(delta);
 		else
-			state->update(delta, m_window, state == subset.front());
+			state->update(delta);
 	}
 }
 

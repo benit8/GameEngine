@@ -6,9 +6,6 @@
 */
 
 #include "Widget.hpp"
-#include "../Graphics/Window.hpp"
-#include "GUI.hpp"
-#include "Env.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -17,65 +14,54 @@ namespace GUI
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Widget::Widget()
-: m_parent(nullptr)
-, m_state(Normal)
-, m_mode(Clickable)
+Widget::Widget(const std::string &id)
+: m_id(id)
 {
 	m_eventDispatcher.onMouseMove(BIND2(Widget::callback_mouseMove));
 	m_eventDispatcher.onMouseDown(BIND1(Widget::callback_mouseDown), sf::Mouse::Left);
 	m_eventDispatcher.onMouseUp(BIND1(Widget::callback_mouseUp), sf::Mouse::Left);
 	m_eventDispatcher.onText(BIND1(Widget::callback_text));
+}
 
-	onFocusOut.connect(this, &Widget::unfocus);
+Widget::Widget(const std::string &id, Mode mode)
+: Widget(id)
+{
+	setMode(mode);
 }
 
 Widget::~Widget()
 {
-	for (auto &child : m_children)
-		child->setParent(nullptr);
-	m_children.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Widget::handleEvent(const sf::Event &e)
 {
-	if (m_parent && Env::modal != nullptr) {
-		Env::modal->handleEvent(e);
+	for (auto &child : getChildren())
+		child->handleEvent(e);
 
-		if (e.type == sf::Event::Closed || e.type == sf::Event::Resized) {
-			for (auto &child : m_children)
-				child->handleEvent(e);
-		}
-	}
-	else {
-		for (auto &child : m_children)
-			child->handleEvent(e);
-	}
-
-	if (m_parent == nullptr) {
-		m_eventDispatcher.dispatchEvent(e);
-	}
-	else {
-		Env::foundTarget = false;
-	}
+	m_eventDispatcher.dispatchEvent(e);
 }
 
-void Widget::render(sf::RenderTarget &rt)
+void Widget::doUpdate(const sf::Time &delta)
+{
+	update(delta);
+	for (auto &c : getChildren())
+		c->doUpdate(delta);
+}
+
+void Widget::doRender(sf::RenderTarget &rt)
 {
 	sf::Vector2f offset = getParentOffset();
 	m_zone.move(offset);
-	draw(rt);
+	render(rt);
 	m_zone.move(-offset);
 
-	for (auto &child : m_children)
-		child->render(rt);
-
-	if (m_parent && Env::modal) {
-		Env::modal->render(rt);
-	}
+	for (auto &c : getChildren())
+		c->doRender(rt);
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void Widget::focus()
 {
@@ -83,7 +69,7 @@ void Widget::focus()
 		return;
 
 	if (Env::target)
-		Env::target->onFocusOut.emit();
+		Env::target->unfocus();
 	Env::target = this;
 	onFocusIn.emit();
 }
@@ -95,9 +81,9 @@ void Widget::unfocus()
 		m_state &= ~State::Clicked;
 	}
 	Env::target = nullptr;
+	onFocusOut.emit();
 }
 
-////////////////////////////////////////////////////////////////////////////////
 
 bool Widget::isMouseHover(sf::Vector2i mouse)
 {
@@ -116,24 +102,13 @@ bool Widget::isMouseHover(sf::Vector2f mouse)
 
 sf::Vector2f Widget::getParentOffset()
 {
-	sf::Vector2f offset;
-
-	if (m_parent) {
-		offset += m_parent->getParentOffset() + m_parent->getPosition();
-	}
-
-	return offset;
+	auto w = dynamic_cast<Widget *>(m_parent);
+	return w ? w->getParentOffset() + w->getPosition() : sf::Vector2f();
 }
 
-bool Widget::isFromModal()
+void Widget::setParent(Parent *parent)
 {
-	if (Env::modal == this)
-		return true;
-
-	if (m_parent)
-		return m_parent->isFromModal();
-
-	return false;
+	m_parent = parent;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -203,143 +178,6 @@ void Widget::callback_text(unsigned unicode)
 {
 	if (Env::target == this)
 		onTextInput.emit(unicode);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-const Widget *Widget::getParent() const {
-	return m_parent;
-}
-
-const std::list<Widget *> &Widget::getChildren() const {
-	return m_children;
-}
-
-void Widget::setParent(Widget *parent) {
-	m_parent = parent;
-}
-
-void Widget::addChild(Widget *child)
-{
-	m_children.push_back(child);
-	child->setParent(this);
-}
-
-void Widget::removeChild(Widget *child)
-{
-	auto it = std::find(m_children.begin(), m_children.end(), child);
-	if (it == m_children.end())
-		return;
-
-	child->setParent(nullptr);
-	m_children.remove(child);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-bool Widget::isTargeted() const {
-	return this == Env::target;
-}
-
-bool Widget::isHovered() const {
-	return m_state & State::Hovered;
-}
-
-bool Widget::isClicked() const {
-	return m_state & State::Clicked;
-}
-
-bool Widget::isDragged() const {
-	return m_state & State::Dragged;
-}
-
-bool Widget::isHoverable() const {
-	return m_mode >= Mode::Hoverable;
-}
-
-bool Widget::isClickable() const {
-	return m_mode >= Mode::Clickable;
-}
-
-bool Widget::isDraggable() const {
-	return m_mode >= Mode::Draggable;
-}
-
-void Widget::setMode(Mode mode) {
-	m_mode = mode;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-float Widget::left() const {
-	return getPosition().x;
-}
-
-float Widget::top() const {
-	return getPosition().y;
-}
-
-void Widget::left(float left) {
-	return setPosition(left, top());
-}
-
-void Widget::top(float top) {
-	return setPosition(left(), top);
-}
-
-void Widget::move(float offsetX, float offsetY) {
-	move(sf::Vector2f(offsetX, offsetY));
-}
-
-void Widget::move(const sf::Vector2f &offset) {
-	setPosition(getPosition() + offset);
-}
-
-void Widget::setPosition(float offsetX, float offsetY) {
-	setPosition(sf::Vector2f(offsetX, offsetY));
-}
-
-void Widget::setPosition(const sf::Vector2f &position) {
-	m_zone.setPosition(position);
-	update(sf::Time::Zero);
-}
-
-const sf::Vector2f &Widget::getPosition() const {
-	return m_zone.getPosition();
-}
-
-sf::Vector2f Widget::getGlobalPosition() {
-	return getPosition() + getParentOffset();
-}
-
-
-float Widget::width() const {
-	return getSize().x;
-}
-
-float Widget::height() const {
-	return getSize().y;
-}
-
-void Widget::width(float width) {
-	setSize(width, height());
-}
-
-void Widget::height(float height) {
-	setSize(width(), height);
-}
-
-void Widget::setSize(float width, float height) {
-	setSize(sf::Vector2f(width, height));
-}
-
-void Widget::setSize(const sf::Vector2f &size) {
-	m_zone.setSize(size);
-	update(sf::Time::Zero);
-}
-
-const sf::Vector2f &Widget::getSize() const {
-	return m_zone.getSize();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -14,13 +14,15 @@ namespace GUI
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Background::Background()
-: m_bgMode(Cover)
+Background::Background(const std::string &id)
+: Widget(id)
+, m_bgMode(Cover)
 , m_color(sf::Color::Transparent)
 , m_anim(nullptr)
 {
-	m_mode = Visible;
+	setMode(Visible);
 	m_zone.setTexture(&m_texture);
+	m_eventDispatcher.onResize(std::bind(&Background::resize, this, _1));
 }
 
 Background::~Background()
@@ -77,7 +79,7 @@ void Background::update(const sf::Time &delta)
 	m_zone.setTextureRect(tRect);
 }
 
-void Background::draw(sf::RenderTarget &rt)
+void Background::render(sf::RenderTarget &rt)
 {
 	rt.draw(m_zone);
 }
@@ -92,9 +94,10 @@ void Background::resize(sf::Vector2u size)
 void Background::setColor(const sf::Color &color)
 {
 	m_color = color;
+	m_bgMode = Color;
 }
 
-bool Background::setImage(const std::string &path, BGMode mode)
+bool Background::setImage(const std::string &path, BackgroundMode mode)
 {
 	if (path.rfind("gif") == path.length() - 3) {
 		auto gif = new Graphics::GIF;
@@ -112,7 +115,7 @@ bool Background::setImage(const std::string &path, BGMode mode)
 	}
 }
 
-bool Background::setImage(const sf::Image &image, BGMode mode)
+bool Background::setImage(const sf::Image &image, BackgroundMode mode)
 {
 	if (!m_texture.loadFromImage(image)) {
 		std::cerr << "Failed to load image background" << std::endl;
@@ -131,7 +134,7 @@ bool Background::setImage(const sf::Image &image, BGMode mode)
 	return true;
 }
 
-bool Background::setImage(Graphics::GIF *gif, BGMode mode)
+bool Background::setImage(Graphics::GIF *gif, BackgroundMode mode)
 {
 	if (!m_texture.loadFromImage(gif->frame(0).image)) {
 		std::cerr << "Failed to load image background" << std::endl;
@@ -152,7 +155,7 @@ bool Background::setImage(Graphics::GIF *gif, BGMode mode)
 	return true;
 }
 
-void Background::setMode(BGMode mode)
+void Background::setBackgroundMode(BackgroundMode mode)
 {
 	m_bgMode = mode;
 	m_texture.setRepeated(m_bgMode == Tiled);

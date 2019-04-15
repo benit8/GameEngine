@@ -16,7 +16,7 @@ namespace GUI {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Widget.hpp"
-#include "Graphics/GIF.hpp"
+#include "../Graphics/GIF.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ namespace GUI
 class Background : public Widget
 {
 public:
-	enum BGMode
+	enum BackgroundMode
 	{
 		Contains,
 		Cover,
@@ -35,25 +35,25 @@ public:
 	};
 
 public:
-	Background();
+	Background(const std::string &id = "");
 	~Background();
 
 public:
 	void update(const sf::Time &) override;
-	void draw(sf::RenderTarget &rt) override;
+	void render(sf::RenderTarget &rt) override;
 	void resize(sf::Vector2u size);
 
 public:
 	void setColor(const sf::Color &color);
-	bool setImage(const std::string &path, BGMode mode = Cover);
-	bool setImage(const sf::Image &image, BGMode mode = Cover);
-	void setMode(BGMode mode);
+	bool setImage(const std::string &path, BackgroundMode mode = Cover);
+	bool setImage(const sf::Image &image, BackgroundMode mode = Cover);
+	void setBackgroundMode(BackgroundMode mode);
 
 private:
-	bool setImage(Graphics::GIF *gif, BGMode mode);
+	bool setImage(Graphics::GIF *gif, BackgroundMode mode);
 
 private:
-	BGMode m_bgMode;
+	BackgroundMode m_bgMode;
 	sf::Color m_color;
 	sf::Texture m_texture;
 	Graphics::GIF *m_anim;
