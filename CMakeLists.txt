@@ -9,11 +9,10 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(GameEngine VERSION 0.1.0)
 
-add_definitions("-g3")
 add_definitions("-fPIC")
+add_definitions("-std=c++17")
 add_definitions("-W -Wall -Wextra")
-include_directories(engine extern)
-link_libraries(GL sfml-system sfml-window sfml-graphics)
+add_definitions("-g3")
 
 set(SOURCES
 	./engine/Application.cpp
@@ -94,3 +93,5 @@ set(SOURCES
 )
 
 add_executable(exe ${SOURCES})
+target_include_directories(exe PUBLIC engine extern)
+target_link_libraries(exe GL sfml-system sfml-window sfml-graphics)
