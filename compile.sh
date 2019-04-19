@@ -1,6 +1,5 @@
 #!/bin/sh
 
-ncore=$(echo "`grep -c ^processor /proc/cpuinfo`+1" | bc)
 bin="exe"
 
 # does `./build` directory exists ?
@@ -15,7 +14,7 @@ fi
 
 cd ./build &&
 cmake .. -G "Unix Makefiles" &&
-cmake --build . -- -j "$ncore" &&
+cmake --build . -- -j $(nproc) &&
 
 # we still in ./build
 cp "./$bin" ../
