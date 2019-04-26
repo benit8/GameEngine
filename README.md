@@ -14,7 +14,6 @@ WIP C++ game engine
 - OpenGL
 
 ## TODO
-- Enhance Logger with TinyFormat
 - GUI
 	- Finish Input keyboard shortcuts
 	- Implement stylesheets

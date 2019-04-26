@@ -13,12 +13,12 @@ State::State(const std::string &name)
 : m_name(name)
 , m_guiRoot(new GUI::Root)
 {
-	Logger::trace() << "States::" << getName() << ": created" << std::endl;
+	Logger::trace("States::%s: created", getName());
 }
 
 State::~State()
 {
-	Logger::trace() << "States::" << getName() << ": destroyed" << std::endl;
+	Logger::trace("States::%s: destroyed", getName());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ void State::initialize()
 	onInitialize();
 	m_initialized = true;
 
-	Logger::trace() << "States::" << getName() << ": initialized" << std::endl;
+	Logger::trace("States::%s: initialized", getName());
 }
 
 void State::handleEvent(const sf::Event &e)
@@ -63,7 +63,7 @@ void State::activate()
 	m_active = true;
 	onActivate();
 
-	Logger::trace() << "States::" << getName() << ": activated" << std::endl;
+	Logger::trace("States::%s: activated", getName());
 }
 
 void State::deactivate()
@@ -73,5 +73,5 @@ void State::deactivate()
 	m_active = false;
 	onDeactivate();
 
-	Logger::trace() << "States::" << getName() << ": deactivated" << std::endl;
+	Logger::trace("States::%s: deactivated", getName());
 }

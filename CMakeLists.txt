@@ -87,6 +87,7 @@ set(SOURCES
 	./extern/stb/stb_gif.h
 	./extern/stb/stb_image.cpp
 	./extern/stb/stb_image.h
+	./extern/tinyformat/tinyformat.hpp
 
 	./tests/main.cpp
 	./tests/States/Test.hpp

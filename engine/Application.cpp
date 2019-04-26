@@ -55,7 +55,7 @@ int Application::run()
 		updateStates();
 	}
 
-	Logger::warn() << "Application: shutting down" << std::endl;
+	Logger::warn("Application: shutting down");
 
 	return EXIT_SUCCESS;
 }
@@ -69,7 +69,7 @@ void Application::close()
 
 void Application::launch()
 {
-	Logger::info() << "Application: launching" << std::endl;
+	Logger::info("Application: launching");
 
 	if (!m_window.isOpen())
 		m_window.open(m_name);
@@ -88,7 +88,7 @@ void Application::processEvents()
 				break;
 			case sf::Event::Resized:
 				m_window.setView(sf::View(sf::FloatRect(0, 0, e.size.width, e.size.height)));
-				Logger::debug() << "Application: resized window to " << e.size.width << "x" << e.size.height << std::endl;
+				Logger::debug("Application: resized window to %ux%u", e.size.width, e.size.height);
 				break;
 			case sf::Event::KeyPressed:
 				if (e.key.code == sf::Keyboard::F11) {
