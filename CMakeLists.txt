@@ -8,13 +8,24 @@
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(GameEngine VERSION 0.1.0)
+add_executable(exe)
 
-add_definitions("-fPIC")
-add_definitions("-std=c++17")
-add_definitions("-W -Wall -Wextra")
-add_definitions("-g3")
+target_compile_features(exe PRIVATE cxx_std_17)
 
-set(SOURCES
+target_compile_options(exe PUBLIC -fPIC)
+target_compile_options(exe PRIVATE -W -Wall -Wextra)
+target_compile_options(exe PRIVATE -g3)
+
+target_include_directories(exe
+PUBLIC
+	engine
+	extern
+PRIVATE
+	tests
+)
+
+target_sources(exe
+PUBLIC
 	./engine/Application.cpp
 	./engine/Application.hpp
 	./engine/EventDispatcher.cpp
@@ -71,6 +82,7 @@ set(SOURCES
 	./engine/Utils/Signal.hpp
 	./engine/Utils/Singleton.hpp
 
+PUBLIC
 	./extern/imgui/imconfig.h
 	./extern/imgui/imgui-SFML.cpp
 	./extern/imgui/imgui-SFML.h
@@ -89,10 +101,15 @@ set(SOURCES
 	./extern/stb/stb_image.h
 	./extern/tinyformat/tinyformat.hpp
 
+PRIVATE
 	./tests/main.cpp
 	./tests/States/Test.hpp
 )
 
-add_executable(exe ${SOURCES})
-target_include_directories(exe PUBLIC engine extern)
-target_link_libraries(exe GL sfml-system sfml-window sfml-graphics)
+target_link_libraries(exe
+PUBLIC
+	GL
+	sfml-system
+	sfml-window
+	sfml-graphics
+)
